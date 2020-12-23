@@ -1,5 +1,7 @@
+<?php
+	require_once($_SERVER["DOCUMENT_ROOT"].'/private/init.php');
 
-<?php 
+
 include('includes/header.inc.php');
 include('includes/sidebar.inc.php');
 ?>
