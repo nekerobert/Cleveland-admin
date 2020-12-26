@@ -1,0 +1,143 @@
+<?php
+    function empty_table_component($span){
+        return '<tr>
+        <td colspan="'.$span.'" class="empty-table"> <div class="empty-table-wrapper"><i class="fa fa-exclamation-triangle text-danger empty-icon"></i><div>Data not available</div></div></td>
+        </tr>';
+    }
+    
+    function pages_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(5);
+
+        }elseif(is_array($result)){
+            // Only a single record existed;
+            $page = $result;
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$page["title"].'</td>
+                <td>'.formatted_date($page["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Page" class="btn btn-sm btn-warning" href="'.DASHBOARD_PATH.'pages/'.u($page['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Delete Page" class="btn btn-sm btn-danger" href="'.DASHBOARD_PATH.'pages/'.u($page['id']).'/delete'.'"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($page = mysqli_fetch_assoc($result)){
+                // Sanitize data
+                $page = sanitize_html($page);
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$page["title"].'</td>
+                <td>'.formatted_date($page["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Page" href="'.DASHBOARD_PATH.'pages/'.u($page['id']).'/edit'.'" class="btn btn-sm btn-warning edit-link" ><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($page["id"]).'" class="btn btn-sm btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>';
+            $pageCount++;
+            
+        }
+        
+    }
+        
+   
+        return $str;
+    }
+
+    function display_delete_modal($data){
+       return '<div id="deletemodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deletemodal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deletemodal">Do you want to delete this '.$data.' ?</h5>
+                    <button class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    '.csrf_token_tag().'
+                </div>
+            </div>
+        </div>
+    </div>
+' ;
+
+    }
+
+
+    function sliders_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(8);
+
+        }elseif(is_array($result)){
+            $slider = regenerate_with_required(json_to_array($result["content"]), 'primary_title,secondary_title');
+            $slider["id"] = $result["id"];
+            $slider["date_created"] = $result["date_created"];
+            $slider["img"] = full_upload_url($result["path"]);
+            // sanitize to avoid xss attack
+            $slider = sanitize_html($slider);
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$slider["primary_title"].'</td>
+                <td>'.$slider["secondary_title"].'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$slider["img"].'" /></td>
+                <td>'.formatted_date($slider["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Slider" class="btn btn-sm btn-warning" href="'.DASHBOARD_PATH.'sliders/'.u($slider['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($slider["id"]).'" class="btn btn-sm btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+                $data = json_to_array($record["content"]);
+                $slider = regenerate_with_required($data, 'primary_title,secondary_title');
+                $slider["id"] = $record["id"];
+                $slider["date_created"] = $record["date_created"];
+                $slider["img"] = full_upload_url($record["path"]);
+                // Sanitize to avoid xss attack
+                $slider = sanitize_html($slider);
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$slider["primary_title"].'</td>
+                <td>'.$slider["secondary_title"].'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$slider["img"].'"/></td>
+                <td>'.formatted_date($slider["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Slider" class="btn btn-sm btn-warning" href="'.DASHBOARD_PATH.'sliders/'.u($slider['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($slider["id"]).'" class="btn btn-sm btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+            $pageCount++;
+            
+        }
+            
+        }
+
+        return $str;
+        
+    }
+
+?>
