@@ -67,7 +67,7 @@ function upload_file($file) {
 	global $upload_path, $max_file_size, $allowed_mime_types, $allowed_extensions, $check_is_image, $check_for_php;
 	$errors = [];
 	
-	if(!empty($file)) {
+	if(!empty($file["name"]) && !empty($file["type"]) && !empty($file["tmp_name"])) {
 		$result = sanitize_file_name($file['name']);
 		$file_extension = file_extension($file["name"]);
 		$file_type = $file['type'];

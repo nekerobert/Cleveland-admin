@@ -1,12 +1,17 @@
 <?php
-    function find_data($table, $columns, $joinQuery=null, $whereQuery=null){
+    function find_data($table, $columns, $joinQuery=null, $whereQuery=null, $sanitize=true){
         global $db;
         $sql = generateSelectSql($table, $columns, $db, $joinQuery, $whereQuery);
         // $sql = "SELECT * FROM foods INNER JOIN files on foods.file_id = files.id ";
         $result = mysqli_query($db, $sql);
-        confirm_result($result);
-        if($result->num_rows === 1){
-            return sanitize_html(mysqli_fetch_assoc($result));
+        if(!confirm_result($result)){
+            return false;
+        }
+        if($result->num_rows === 1 ){
+            // Return either sanitize or unsanitized version of the fetched record
+            // unsanitized version is very useful when record contains json str
+            // Sanitize record with JSON str throughs up error when decoding the string
+            return $sanitize ? sanitize_html(mysqli_fetch_assoc($result)) : mysqli_fetch_assoc($result);
         }
         return $result; //result object
         

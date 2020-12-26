@@ -1,6 +1,6 @@
 <?php
 
-// echo $_SERVER["DOCUMENT_ROOT"]; exit;
+    var_dump(array_diff(["me","them","love"],["me","them","love","cast","john","jungle"]));
 
 
 ?>

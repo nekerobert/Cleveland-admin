@@ -66,6 +66,13 @@
         
     }
 
+    function confirm_request_source(){
+        if(!csrf_token_is_valid() || !csrf_token_is_recent()) {
+            echo display_status_message(false, "Sorry, request was not valid.");
+            exit;
+        }
+    }
+
 
 
 

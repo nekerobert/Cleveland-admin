@@ -55,10 +55,44 @@ RewriteRule ^(.+)$ $1.php [L,QSA]
 RewriteCond %{HTTP_HOST} ^my.tedikom.online.com$
 RewriteRule (.*) https://my.tedikom.online/$1 [R=301,L] 
 
-#pages
+#pages Routes
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/manage /dashboard/manage_pages.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/([a-zA-Z0-9-/]+)/edit$ /dashboard/manage_pages?page_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/([a-zA-Z0-9-/]+)/delete$ /dashboard/manage_pages?page_id=$1&mode=delete [NC,L]
+
+
+#Slider Routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/sliders/manage /dashboard/manage-home-slider.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/sliders/create /dashboard/add-home-slider.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/sliders/file/([a-zA-Z0-9-/]+)/edit$ /dashboard/add-home-slider.php?slider_id=$1&mode=editFile [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/sliders/([a-zA-Z0-9-/]+)/edit$ /dashboard/add-home-slider.php?slider_id=$1&mode=edit [NC,L]
+
+
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/sliders/([a-zA-Z0-9-/]+)/delete$ /dashboard/manage-home-slider.php?slider_id=$1&mode=delete [NC,L]
+
+
 
 #RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-d

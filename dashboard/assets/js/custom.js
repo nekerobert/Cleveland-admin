@@ -1,3 +1,4 @@
+
 (function($) {
 	"use strict";
 
@@ -99,5 +100,103 @@ if($(".scroll_auto").length) {
 		});
 	});
 	$('#dc_accordion').dcAccordion();
+
+
+
+const form = document.getElementById("form");
+const restBtn = document.getElementById('reset');
+const tableEl = document.getElementById('table');
+const modalEl = document.getElementById('deletemodal');
+const checkBoxes = document.querySelectorAll('div.form-check input[type="checkbox"]');
+;
+const editBtn = document.querySelector('.slider-img span');
+const fileBox = document.getElementById("fileBox");
+const editFileEl = document.getElementById("editFile")
+// Reset the form element on the page
+if(restBtn !== null){
+	restBtn.addEventListener("click", (evt)=>{
+		const inputEls = form.querySelectorAll('div.form-group input');
+		const selectEls = form.querySelectorAll('div.form-group select');
+		inputEls.forEach((inputEl)=>{
+				inputEl.setAttribute('value', '');
+		});
+		if(selectEls.length !== 0){
+			selectEls.forEach((selectEl)=>{
+					selectEl.options[selectEl.selectedIndex].removeAttribute('selected');
+					selectEl.firstElementChild.setAttribute('selected','selected');
+			});
+		}
+		evt.target.value = 'Reset';
+	});
+}
+function format_link(data){
+	let str = window.location.href;
+	return str.replace('manage', data)
+}
+
+function formModal(link){
+	const token = modalEl.querySelector('.modal-body input[type="hidden"]').value;
+	return `<form id="modalForm" class="right-text-label-form feedback-icon-form" action="${link}" method="post">
+	<div class="form-group">
+		<button type="submit" class="btn btn-info btn-block">Continue</button>
+		<input type="hidden" value="${token}" name="csrf_token"></input>
+	</div>
+	</form>
+`;
+}
+
+function populateModal(data, type){
+	const link = format_link(`${data}/${type}`);
+	modalEl.querySelector('.modal-body').innerHTML = formModal(link);
+
+}
+
+if(tableEl !== null){
+	const tableRowEls = tableEl.querySelectorAll('tbody tr');
+	tableRowEls.forEach((tableRowEl)=>{
+		const aEl = tableRowEl.querySelector('td a.delete-link');
+		aEl.addEventListener('click', ()=>{
+			const data = aEl.getAttribute('data-key');
+			populateModal(data, 'delete');
+		})
+	});
+
+}
+
+if(checkBoxes !== null){
+	checkBoxes.forEach((checkbox)=>{
+		checkbox.addEventListener('click', ()=>{
+			if(checkbox.checked){
+				checkbox.parentElement.nextElementSibling.classList.remove('d-none');
+			}else{
+				checkbox.parentElement.nextElementSibling.classList.add('d-none');
+			}
+		});
+	})
+
+}
+
+if(editBtn !== null && fileBox !== null){
+	editBtn.addEventListener("click", (evt)=>{
+		fileBox.classList.remove('d-none');
+	});
+}
+
+if(fileBox !== null){
+	const cancelbtn = fileBox.querySelector('.control button[type="button"]');
+	cancelbtn.addEventListener('click', (evt)=>{
+		fileBox.classList.add('d-none');
+	});
+}
+
+if(editFileEl !== null){
+	const token = form.querySelector('input[type="hidden"]').value;
+	editFileEl.querySelector('input[type="hidden"]').value = token;
+}
+
+
+
 	// End
 })(jQuery);
+
+

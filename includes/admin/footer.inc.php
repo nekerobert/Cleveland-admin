@@ -35,6 +35,10 @@
         $(document).ready(function () {
             $('#bs4-table').DataTable();
         });
+
+		$(document).ready(function(){
+  		$('[data-toggle="tooltip"]').tooltip();
+		});
     </script>
 
 <!-- ckeditor script -->

@@ -36,6 +36,26 @@ function full_upload_path($path){
     return UPLOAD_PATH.'/'.$path;
 }
 
+function formatted_date($date){
+    $str = substr($date, 0, 10);
+    $strArray = explode('-',$str);
+    $str = $strArray[2] . '/'.$strArray[1] . '/'.$strArray[0];
+    return $str;
+}
+
+function array_to_json($array,$exclude=null){
+    if(!is_null($exclude)){
+        $array = exclude_and_regenerate($array,$exclude);
+    }
+    return json_encode($array);
+}
+
+function json_to_array($json){
+    return json_decode($json,true);
+}
+
+
+
 
 
 ?>

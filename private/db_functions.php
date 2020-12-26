@@ -28,9 +28,7 @@
     }
 
     function confirm_result($result){
-        if(empty($result->num_rows)){
-            exit("Data does not exists");
-        }
+        return $result->num_rows === 0 ? false : true;
     }
 
     function exit_db ($msg, $result, $db){
@@ -55,6 +53,24 @@
             foreach($data as $key=> $value){
                 if(in_array($key, $columns)){
                     $newData[$key] = $value;
+                }
+            }
+            // reassign the new data array to the previous data array
+            $data = $newData;
+        }
+
+        return $data;
+
+    }
+
+    function regenerate_with_required($data, $require=null){
+        $columns = array_keys($data);
+        if(!is_null($require)){
+            $newData = []; //redeclare a new data array
+            $requireArray = explode(",", $require);
+            foreach($requireArray as $value){
+                if(in_array($value, $columns)){
+                    $newData[$value] = $data[$value];
                 }
             }
             // reassign the new data array to the previous data array

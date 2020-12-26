@@ -1,5 +1,6 @@
 <?php
     session_start(); //start a session
+    // session_regenerate_id(true);
     $GLOBALS["path"] = "/";     // This will be updated in the remote server
     define('PRIVATE_PATH', dirname(__FILE__)); //Absolute path to private folder
     define("PROJECT_PATH", dirname(PRIVATE_PATH)); //Absolute path to Project folder
@@ -15,12 +16,14 @@
     require_once('file_upload_functions.php');
     require_once('validation_functions.php');
     require_once('authentication.php');
+    require_once('status_error_functions.php');
     require_once('components.php');
     require_once('pagination.php');
     require_once('csrf_token_functions.php');
     
     // Database Connection Handle
     $db = db_connect();
+
 
 
     

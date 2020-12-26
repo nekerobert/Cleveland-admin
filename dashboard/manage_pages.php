@@ -1,9 +1,114 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
+<?php
+	$errors = []; $status = false; $msg = ""; 
+	$formUrl = DASHBOARD_PATH.'pages/manage';
+	$formTitle = "Create A New Page";
+	if(isset($_GET['page_id'])){
+		$id = h(u($_GET["page_id"]));
+	}
+
+	if(isset($_COOKIE["message"])){
+		// Get Output Message from cookie
+	// It is placed here to avoid headers sent out before output error
+	// Information 
+		$msgArray = cookie_message();
+		$status = $msgArray["status"];
+		$msg = $msgArray["message"];
+			// Destroy cookie Message
+		destroy_cookie_message();
+	}
+
+	if(is_post_request()){
+		// confirm request's csrf identifier validity and duration
+		confirm_request_source();
+		// Sanitize to avoid xss attack
+		$page = sanitize_html($_POST);
+		// N/B : Delete and Edit operation is handle using post request method also
+		if(isset($_GET["mode"]) && isset($id)){
+			// Mode is for performing either edit or delete operation
+			switch ($_GET["mode"]) {
+				case 'edit':
+					// validate Data
+					$valResult = validate_data($page, ['title'=>'title'], 'csrf_token');
+					// Id to used for updating record
+					if(!$valResult){
+						// No Errors Continue with Updating
+						$page["id"] = $id;
+						$status = update_data('pages',$page,'id,csrf_token');
+						$msg = "Page Updated Successfully";
+						// Set cookie message
+						cookie_message($status, $msg);
+						redirect_to(DASHBOARD_PATH.'pages/manage');
+
+					}else{
+						// Errors Occured
+						$errors = $valResult;
+						$pages = find_data('pages',['id','title','date_created']);
+
+					}
+					
+					break;
+
+				case 'delete':
+					$status = delete_data('pages', [$id]);
+					$msg = "Page deleted successfully";
+					// Set cookie message here
+					cookie_message($msg,$status);
+					redirect_to(DASHBOARD_PATH.'pages/manage');
+					break;
+				default:
+					# code...
+					break;
+			}
+		}else{
+			// Creating a new Page is handle here
+			// validate Data
+			$valResult = validate_data($page, ['title'=>'title'], 'csrf_token');
+			if(!$valResult){
+				// No errors continue with insertion of data
+				$status = insert_data('pages', $page, 'csrf_token');
+				$msg = "Page was created successfully";
+				// Retrieve record to be displayed on the table again
+				$pages  = find_data('pages',['id','title','date_created']);
+			}else{
+				// There is errors
+				$errors = $valResult;
+				// Retrieve record to be displayed on the table again
+				$pages  = find_data('pages',['id','title','date_created']);
+			}
+
+		}
+
+	}else{
+		//Get Request
+		if(isset($_GET["mode"]) && isset($id)){
+			// Mode is for performing either edit or delete operation
+			switch ($_GET["mode"]) {
+				case 'edit':
+					$page = find_data_by_id('pages',['title'],$id);
+					$formUrl = DASHBOARD_PATH.'pages/'.$id.'/edit';
+					$formTitle = "Edit Selected Page";
+					// repopulate table again
+					$pages  = find_data('pages',['id','title','date_created']);
+					# code...
+					break;
+			}
+			
+		}else{
+			//display all pages if any
+			$pages  = find_data('pages',['id','title','date_created']);
+		}
+
+
+	}
+
+?>
 
 <?php 
 	require_once(INCLUDES_PATH.'/admin/header.inc.php');
 	require_once(INCLUDES_PATH.'/admin/sidebar.inc.php');
 ?>
+
 <!-- include headers stops -->
 			<!--main contents start-->
 			<main class="content_wrapper">
@@ -13,7 +118,7 @@
 						<div class="row d-flex align-items-center">
 							<div class="col-md-6">
 								<div class="page-breadcrumb">
-									<h1>Manage About Us</h1>
+									<h1>Pages</h1>
 								</div>
 							</div>
 							<div class="col-md-6 justify-content-md-end d-md-flex">
@@ -21,11 +126,11 @@
 									<ol class="breadcrumb">
 										<li>
 											<i class="fa fa-home"></i>
-											<a class="parent-item" href="#">About</a>
+											<a class="parent-item" href="<?php echo DASHBOARD_PATH .'index'; ?>">Home</a>
 											<i class="fa fa-angle-right"></i>
 										</li>
 										<li class="active">
-											About Us
+											Pages
 										</li>
 									</ol>
 								</div>
@@ -36,53 +141,41 @@
 				<!--page title end-->
 
 				<div class="container-fluid">
-
+					<?php echo display_status_message($status, $msg); ?>
 					<!-- state start-->
 					<div class="row">
 						<!-- table starts -->
-						<div class="col-sm-12 col-md-12 col-lg-6 col-xs-12 col-xl-6">
+						<div class="col-sm-12 col-md-12 col-lg-5 col-xs-12 col-xl-5">
 							<div class="row">
 								<div class="col-md-12">
 									<div class="card card-shadow mb-4">
 										<div class="card-header bg-info ">
 											<div class="card-title text-white">
-												About Slider Image Table
+												Manage Pages (<i class="fa fa-book"></i>) 
 											</div>
 										</div>
 							            <div class="card-body table-responsive">
-                                        <table id="bs4-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                                        <table id="table" class="table table-bordered table-striped" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>S/N</th>
-                                                    <th>About Slider</th>
+                                                    <th>Page Title</th>
                                                     <th>Date Added</th>
-                                                    <th>Edit</th>
-                                                    <th>Delete</th>
+													<th colspan="3">Actions</th>
                                                     <!-- <th>Action</th> -->
                                                 </tr>
                                             </thead>
                                             <tfoot>
                                                 <tr>
                                                     <th>S/N</th>
-                                                    <th>About Slider</th>
+                                                    <th>Page Title</th>
                                                     <th>Date Added</th>
-                                                    <th>Edit</th>
-                                                    <th>Delete</th>
+                                                    <th colspan="2">Actions</th>
                                                     <!-- <th>Action</th> -->
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                <tr>
-                                                    <td></td>
-                                                    <td><img src="../images/gallery/01.jpg" class="img-thumbnail" alt="member"></td>
-                                                    <td></td>
-                                                    <td>
-                                                      <button type="submit" class="btn btn-success editbtn" name="editfaq" id="editId">Edit</button>
-                                                  </td>
-                                                  <td>
-                                                      <button type="submit" class="btn btn-danger confirmDelete" name="delete">Delete</button>
-                                                    </td>
-                                                </tr>
+                                              	<?php echo pages_table_component($pages); ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -94,106 +187,29 @@
 
 						<!-- form statrts -->
 
-
-
-
-
-						<div class="col-sm-12 col-md-12 col-lg-6 col-xs-12 col-xl-6">
+						<div class="col-sm-12 col-md-12 col-lg-7 col-xs-12 col-xl-7">
 							<div class="row">
 							<div class="col-md-12">
 									<div class="card  border-info lobicard-custom-control lobi-light  mb-4">
 										<div class="card-header bg-info ">
 											<div class="card-title text-white">
-												Manage About Details
+												<?php echo $formTitle; ?> (<i class="fa fa-book"></i>)
 											</div>
 										</div>
 								<div class="card-body card-responsive">
-									<form id="signupForm1" method="post" class=" right-text-label-form feedback-icon-form" action="#" novalidate="novalidate">
-										<div class="form-group row">
-											<label class="col-sm-4 control-label" for="">Title</label>
-											<div class="col-sm-5">
-												<input type="text" class="form-control" id="" name="" placeholder="About Title">
-											</div>
+									<form id= "form" action="<?php echo $formUrl; ?>" method="post">
+										<div class="form-group mb-3">
+											<label class="control-label" for="title">Page Title</label>
+											<input type="text" value="<?php echo $page["title"] ?? ""; ?> " class="form-control" id="title" name="title" placeholder="Enter New Page Title">
+											<?php 	// Display validation error if available  
+												echo form_error_component($errors,'title')
+											?>
 										</div>
-										<div class="form-group row">
-											<label class="col-sm-4 control-label" for="">Subtitle</label>
-											<div class="col-sm-5">
-												<input type="text" class="form-control" id="" name="sectitle" placeholder="About Subtitle">
-											</div>
+										<?php echo csrf_token_tag(); ?>
+										<div class="form-group text-center form-row">
+											<div class="col-sm-8"><button type="submit" class="btn btn-block btn-info">Submit</button></div>
+											<div class="col-sm-4"><input id="reset" type="reset" value="Reset" class="btn btn-block btn-danger"/></div>
 										</div>
-										<div class="form-group row">
-											<div class="col-sm-8 ml-auto">
-												<div class="checkbox">
-													<label>
-														<input type="checkbox" id="agree" name="agree" value="agree"> Enable Subtitle </label>
-												</div>
-											</div>
-										</div>
-										<div class="form-group row">
-											<label class="col-sm-4 control-label" for="">Short Content</label>
-											<div class="col-sm-5">
-												 <textarea class="form-control" id="" name="" placeholder="Provide Short Content for home page"></textarea>
-											</div>
-										</div>
-								<div class="form-group row">
-											<label class="col-sm-4 control-label" for="">Full Content</label>
-											<div class="col-sm-5">
-												 <textarea class="form-control" id="editor" name="" placeholder="Provide full Content for about page"></textarea>
-											</div>
-										</div>
-										<div class="form-group row">
-											<label class="col-sm-4 control-label" for="">Button Text</label>
-											<div class="col-sm-5">
-												<input type="text" class="form-control" id="" name="" placeholder="Read more button text">
-											</div>
-										</div>
-										<div class="form-group row">
-											<label class="col-sm-4 control-label" for="">Button Link</label>
-											<div class="col-sm-5">
-												<input type="text" class="form-control" id="" name="" placeholder="eg: https://cleveland.com/about">
-											</div>
-										</div>
-										<div class="form-group row">
-											<label class="col-sm-4 control-label" for="">About Slider Image</label>
-											<div class="col-sm-5">
-												 <input type="file" multiple class="form-control" id="" name="" placeholder="Choose Slider image" />
-											</div>
-										</div>
-
-									<br>
-										<div class="form-group row">
-											<label class="col-sm-4 control-label" for="">Vision Title</label>
-											<div class="col-sm-5">
-												<input type="text" class="form-control" id="" name="sectitle" placeholder="Vision Title">
-											</div>
-										</div>
-											<div class="form-group row">
-											<label class="col-sm-4 control-label" for="">Vision Content</label>
-											<div class="col-sm-5">
-												 <textarea class="form-control" id="" name="" placeholder=" Vision Content"></textarea>
-											</div>
-										</div>
-										<div class="form-group row">
-											<label class="col-sm-4 control-label" for="">Mision Title</label>
-											<div class="col-sm-5">
-												<input type="text" class="form-control" id="" name="sectitle" placeholder="Mision Title">
-											</div>
-										</div>
-										<div class="form-group row">
-											<label class="col-sm-4 control-label" for="">Mission Content</label>
-											<div class="col-sm-5">
-												 <textarea class="form-control" id="" name="" placeholder=" Mission Content"></textarea>
-											</div>
-										</div>
-										<div class="form-group row">
-											<div class="col-sm-8 ml-auto">
-												<button type="submit" class="btn btn-info btn-block btn-lg" name="submit" value="submit">
-													Submit
-												</button>
-											</div>
-										</div>
-									</form>
-								</div>
 									</div>
 								</div>
 								</div>
@@ -202,7 +218,9 @@
 							</div>
 							</main>
 			<!--main contents end-->
-
+			
+			<!-- Delete modal -->
+			<?php echo display_delete_modal('Page'); ?>
 
 <!-- include footer starts-->
 <?php require_once(INCLUDES_PATH.'/admin/footer.inc.php');?>

@@ -1,102 +1,143 @@
 <?php
-
-    function food_table($result){
-        $str = "";
-        while($food = mysqli_fetch_assoc($result)){
-            // Sanitize data
-            $file_path = UPLOAD_URL.'/'.$food['file_path'];
-            $food = sanitize_html($food);
-            $str.= "<tr>
-            <td>{$food["id"]}</td>
-            <td>{$food["title"]}</td>
-            <td>{$food["description"]}</td>
-            <td><img style=\"width: 50px; height:50px;\" src=\"{$file_path}\" alt=\"\"></td>
-            <td>{$food["date_created"]}</td>
-            <td><a class=\"btn btn-sm btn-primary\" href=\"show_food.php?id={$food['id']}\"><i class=\"fa fa-eye\"></i></a></td>
-            <td><a class=\"btn btn-sm  btn-primary\" href=\"edit_food.php?id={$food["id"]}\"><i class=\"fa fa-pen\"></i></a></td>
-            <td><a class=\"btn btn-sm  btn-danger\" href=\"delete_food.php?id={$food["id"]}\"><i class=\"fa fa-trash\"></i></a></td>
-        </tr>";
-
-        }
-
-        return $str;
+    function empty_table_component($span){
+        return '<tr>
+        <td colspan="'.$span.'" class="empty-table"> <div class="empty-table-wrapper"><i class="fa fa-exclamation-triangle text-danger empty-icon"></i><div>Data not available</div></div></td>
+        </tr>';
     }
-
-    function food_column($result){
-        $str = '';
-        if(is_array($result)){
-            $file_path = UPLOAD_URL.'/'.$result['file_path'];
-            $str.='<div class="col-lg-3 col-sm-3 gallery-image">
-            <img src="'.$file_path.' " alt="food">
-            <p>'.$result["title"].'</p>
-            <p class="describe">'.$result["description"].'</p>
-        </div>';
-        }else{
-            while($food = mysqli_fetch_assoc($result)){
-                $food = sanitize_html($food);
-                $file_path = UPLOAD_URL.'/'.$food['file_path'];
-                $str.='<div class="col-lg-3 col-sm-3 gallery-image">
-                <img src="'.$file_path.' " alt="food">
-                <p>'.$food["title"].'</p>
-                <p class="describe">'.$food["description"].'</p>
-            </div>';
     
-            }
-        }
-       
-        return $str;
+    function pages_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(5);
 
-    }
+        }elseif(is_array($result)){
+            // Only a single record existed;
+            $page = $result;
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$page["title"].'</td>
+                <td>'.formatted_date($page["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Page" class="btn btn-sm btn-warning" href="'.DASHBOARD_PATH.'pages/'.u($page['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Delete Page" class="btn btn-sm btn-danger" href="'.DASHBOARD_PATH.'pages/'.u($page['id']).'/delete'.'"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
 
-    function display_message($status, $msg){
-        $str = '';
-        if(strlen($msg) !== 0){
-            if($status){
-                $str.='<div class="alert alert-success" role="alert">
-                <h4 class="alert-heading">Success</h4>
-               '.$msg.'
-            </div>';
-                return $str;
-            }else{
-                $str.='<div class="alert alert-danger" role="alert">
-                <h4 class="alert-heading">Failure</h4>
-               '.$msg.'
-             </div>';
-             return $str;
-            }
         }else{
-            return $str;
-        }
-
-        
-    }
-
-    function form_error_component($data, $key){
-        $str = "";
-        if(isset($data[$key])){
-            $str.= '<div class="text-danger"> '.$data[$key].' </div>';
-        }
-        return $str;
-
-    }
-
-    function display_multiple_errors($errors){
-        $str = "";
-        if(isset($errors["mode"])){
-            $errors = exclude_and_regenerate($errors, 'mode');
-          $str .= ' <ul class="alert alert-warning alert-dismissible fade show" role="alert">
-          <strong>Ooops! Failure</strong> Please fix the following Errors.
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-          </button>';
-          foreach($errors as $error){
-            $str.='<li>'.$error.'</li>';
-          }
-          $str.=" </ul>";
+            // An Object was return
+            // Fetch records from the objects
+            while($page = mysqli_fetch_assoc($result)){
+                // Sanitize data
+                $page = sanitize_html($page);
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$page["title"].'</td>
+                <td>'.formatted_date($page["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Page" href="'.DASHBOARD_PATH.'pages/'.u($page['id']).'/edit'.'" class="btn btn-sm btn-warning edit-link" ><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($page["id"]).'" class="btn btn-sm btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>';
+            $pageCount++;
+            
         }
         
+    }
+        
+   
         return $str;
+    }
 
+    function display_delete_modal($data){
+       return '<div id="deletemodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deletemodal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deletemodal">Do you want to delete this '.$data.' ?</h5>
+                    <button class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    '.csrf_token_tag().'
+                </div>
+            </div>
+        </div>
+    </div>
+' ;
+
+    }
+
+
+    function sliders_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(8);
+
+        }elseif(is_array($result)){
+            $slider = regenerate_with_required(json_to_array($result["content"]), 'primary_title,secondary_title');
+            $slider["id"] = $result["id"];
+            $slider["date_created"] = $result["date_created"];
+            $slider["img"] = full_upload_url($result["path"]);
+            // sanitize to avoid xss attack
+            $slider = sanitize_html($slider);
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$slider["primary_title"].'</td>
+                <td>'.$slider["secondary_title"].'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$slider["img"].'" /></td>
+                <td>'.formatted_date($slider["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Slider" class="btn btn-sm btn-warning" href="'.DASHBOARD_PATH.'sliders/'.u($slider['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($slider["id"]).'" class="btn btn-sm btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+                $data = json_to_array($record["content"]);
+                $slider = regenerate_with_required($data, 'primary_title,secondary_title');
+                $slider["id"] = $record["id"];
+                $slider["date_created"] = $record["date_created"];
+                $slider["img"] = full_upload_url($record["path"]);
+                // Sanitize to avoid xss attack
+                $slider = sanitize_html($slider);
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$slider["primary_title"].'</td>
+                <td>'.$slider["secondary_title"].'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$slider["img"].'"/></td>
+                <td>'.formatted_date($slider["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Slider" class="btn btn-sm btn-warning" href="'.DASHBOARD_PATH.'sliders/'.u($slider['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($slider["id"]).'" class="btn btn-sm btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+            $pageCount++;
+            
+        }
+            
+        }
+
+        return $str;
+        
     }
 
 ?>

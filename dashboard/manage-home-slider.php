@@ -1,8 +1,72 @@
+<?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
+<?php
+	$errors = []; $status = false; $msg = ""; 
+	if(isset($_GET['slider_id'])){
+		$id = h(u($_GET["slider_id"]));
+	}
+
+	if(isset($_COOKIE["message"])){
+		// Get Output Message from cookie
+	// It is placed here to avoid headers sent out before output error
+	// Information 
+		$msgArray = cookie_message();
+		$status = $msgArray["status"];
+		$msg = $msgArray["message"];
+			// Destroy cookie Message
+		destroy_cookie_message();
+	}
+
+	if(is_post_request()){
+		// confirm request's csrf identifier validity and duration
+		confirm_request_source();
+		// Sanitize to avoid xss attack
+		$slider = sanitize_html($_POST);
+		// N/B : Delete and Edit operation is handle using post request method also
+		if(isset($_GET["mode"]) && isset($id)){
+			// Mode is for performing either edit or delete operation
+			switch ($_GET["mode"]) {
+				case 'delete':
+					// confirm if the id is actually mapped to a slider
+					$msg = "Slider does'nt exist";
+					$slider = find_data('page_datas',['id'],null,'WHERE page_datas.title="slider" AND page_datas.id ='.merge_and_escape([$id], $db));
+					if($slider){
+						// Slider Exists
+						$status = delete_data('page_datas', [$id]);
+						$msg = "Slider deleted successfully";
+					}
+						// Set cookie message here
+					cookie_message($msg,$status);
+					redirect_to(DASHBOARD_PATH.'sliders/manage');
+					break;
+				default:
+					# code...
+					break;
+			}
+		}
+
+	}else{
+		if(isset($_GET["mode"]) && isset($id)){
+			switch ($_GET["mode"]) {
+				case 'delete':
+					$msg = "You have not selected any slider";
+					cookie_message($msg);
+					redirect_to(DASHBOARD_PATH.'sliders/manage');
+				break;
+			}
+		}else{
+			//display all pages if any
+			$sliders  = find_data('page_datas',['page_datas.id','content','path','page_datas.date_created'],'INNER JOIN files ON page_datas.file_id = files.id',"WHERE page_datas.title='slider'",false);
+		}
+		
+	}
+
+?>
 
 <?php 
-include('includes/header.inc.php');
-include('includes/sidebar.inc.php');
+	require_once(INCLUDES_PATH.'/admin/header.inc.php');
+	require_once(INCLUDES_PATH.'/admin/sidebar.inc.php');
 ?>
+
 <!-- include headers stops -->
 
 			<!--main contents start-->
@@ -10,10 +74,11 @@ include('includes/sidebar.inc.php');
 				<!--page title start-->
 				<div class="page-heading">
 					<div class="container-fluid">
+							<?php echo display_status_message($status, $msg); ?>
 						<div class="row d-flex align-items-center">
 							<div class="col-md-6">
 								<div class="page-breadcrumb">
-									<h1>Manage Home Slider</h1>
+									<h1>Manage Home Page Slider</h1>
 								</div>
 							</div>
 							<div class="col-md-6 justify-content-md-end d-md-flex">
@@ -43,22 +108,25 @@ include('includes/sidebar.inc.php');
 						<!-- table starts -->
 								<div class="col-md-12">
 									<div class="card card-shadow mb-4">
-										<div class="card-header bg-info ">
+										<div class="card-header justify-content-between d-flex bg-info ">
 											<div class="card-title text-white">
 												Home Slider Table
 											</div>
+											<div class="card-title text-white">
+													<a class="btn btn-dark" href="<?php echo DASHBOARD_PATH.'sliders/create'?>"><i class="fa fa-pencil"></i> Create A New Slider</a>
+												</div>
 										</div>
 							          <div class="card-body table-responsive">
-                                        <table id="bs4-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                                        <table id="table" class="table table-bordered table-striped" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                    <th>S/N</th>
                                                     <th>Primary Title</th>
                                                      <th>Secondary Title</th>
                                                     <th>Slider Image</th>
-                                                    <th>Date Added</th>
-                                                     <th >Edit</th>
-                                                    <th >Delete</th>
+                                                    <th>Date Created</th>
+                                                     <th colspan="2">Actions</th>
+                                                   
                                                      <!-- <th colspan="2">Action</th> -->
                                                 </tr>
                                             </thead>
@@ -69,29 +137,12 @@ include('includes/sidebar.inc.php');
                                                      <th>Secondary Title</th>
                                                     <th>Slider Image</th>
                                                     <th>Date Added</th>
-                                                    <th >Action</th>
-                                                    <th ></th>
-                                                    <th ></th>
+                                                    <th colspan="2">Action</th>
                                                      <!-- <th colspan="2">Action</th> -->
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                <tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td><img src="../images/gallery/01.jpg" class="img-thumbnail" alt="member">
-													</td>
-                                                    <td>
-                                                    	 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#viewSlider" data-whatever="@mdo">View</button>
-                                                    </td>
-                                                    <td>
-                                                      <button type="submit" class="btn btn-success editbtn" name="editfaq" id="editId">Edit</button>
-                                                  </td>
-                                                  <td>
-                                                      <button type="submit" class="btn btn-danger confirmDelete" name="delete">Delete</button>
-                                                    </td>
-                                                </tr>
+                                                <?php echo sliders_table_component($sliders); ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -103,84 +154,11 @@ include('includes/sidebar.inc.php');
 						</main>
 			<!--main contents end-->
 
-<!-- modal starts -->
-                        <div class="col-xl-4  col-lg-6">
-                            <div class="card card-shadow mb-4">
-                                <div class="card-body">
-   					<div class="modal fade" id="viewSlider" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-										<div class="modal-dialog" role="document">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h5 class="modal-title" id="exampleModalLabel">View Home Slider</h5>
-													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button>
-												</div>
-												<div class="modal-body">
-													<form>
-														<div class="form-group">
-															<label for="recipient-name" class="col-form-label">Primary Title:</label>
-															<input type="text" class="form-control" id="" name="" placeholder="Primary Title" readonly>
-														</div>
-														<div class="form-group">
-															<label for="recipient-name" class="col-form-label">Secondary Title:</label>
-															<input type="text" class="form-control" id="" name="" placeholder="Secondary Title" readonly>
-														</div>
-														<div class="form-group">
-															<div class="checkbox">
-													<label>
-														<input type="checkbox" id="agree" name="agree" value="agree" readonly> Enable secondary title </label>
-												</div>
-														</div>
-														<div class="form-group">
-															<label for="recipient-name" class="col-form-label">Button One Text:</label>
-															<input type="text" class="form-control" id="" name="" placeholder="Button one text" readonly>
-														</div>
-														<div class="form-group">
-															<label for="recipient-name" class="col-form-label">Button One Link:</label>
-															<input type="text" class="form-control" id="" name="" placeholder="Button one link" readonly>
-														</div>
-														<div class="form-group">
-															<div class="checkbox">
-													<label>
-														<input type="checkbox" id="agree" name="agree" value="agree" readonly> Enable button one </label>
-												</div>
-														</div>
 
-														<div class="form-group">
-															<label for="recipient-name" class="col-form-label">Button Two Text:</label>
-															<input type="text" class="form-control" id="" name="" placeholder="Button two text" readonly>
-														</div>
-														<div class="form-group">
-															<label for="recipient-name" class="col-form-label">Button Two Link:</label>
-															<input type="text" class="form-control" id="" name="" placeholder="Button two link" readonly>
-														</div>
-														<div class="form-group">
-															<div class="checkbox">
-													<label>
-														<input type="checkbox" id="agree" name="agree" value="agree" readonly> Enable button two </label>
-												</div>
-														</div>
-													<div class="form-group">
-															<label for="recipient-name" class="col-form-label">Home Slider Image:</label>
-															<input type="file" multiple class="form-control" id="" name="" placeholder="Choose Home Slider image" />
-														</div>
-													</form>
-												</div>
-												<div class="modal-footer">
-													<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-												</div>
-											</div>
-										</div>
-									</div>
-                                    </div>
-                                </div>
-                            </div>
-        <!-- modal ends -->
+			<!-- Delete modal -->
 
+<?php echo display_delete_modal('Slider'); ?>
 
 <!-- include footer starts-->
-<?php 
-include('includes/footer.inc.php');
-?>
+<?php require_once(INCLUDES_PATH.'/admin/footer.inc.php');?>
 <!-- include footer stops

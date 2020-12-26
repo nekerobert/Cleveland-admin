@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <?php require_once(INCLUDES_PATH.'/admin/head.inc.php'); ?>
@@ -9,8 +8,8 @@
 		<header class="main-header">
 			<div class="container_header">
 				<div class="logo d-flex align-items-center">
-					<a href="#"> <strong class="logo_icon"> <img src="assets/images/small-logo.png" alt=""> </strong> <span class="logo-default">
-							<img src="assets/images/logo2.png" alt=""> </span> </a>
+					<a href="#"> <strong class="logo_icon"> <img src="<?php echo ADMIN_ASSET_PATH.'/images/small-logo.png'?>" alt=""> </strong> <span class="logo-default">
+							<img src="<?php echo ADMIN_ASSET_PATH.'/images/logo2.png'?>" alt=""> </span> </a>
 					<div class="icon_menu full_menu">
 						<a href="#" class="menu-toggler sidebar-toggler"></a>
 					</div>
