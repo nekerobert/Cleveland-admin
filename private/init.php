@@ -2,6 +2,8 @@
     session_start(); //start a session
     // session_regenerate_id(true);
     $GLOBALS["path"] = "/";     // This will be updated in the remote server
+    // $path = parse_url($GLOBALS["path"]); 
+    
     define('PRIVATE_PATH', dirname(__FILE__)); //Absolute path to private folder
     define("PROJECT_PATH", dirname(PRIVATE_PATH)); //Absolute path to Project folder
     define('INCLUDES_PATH', PROJECT_PATH.'/includes'); //Absolute path to include folder

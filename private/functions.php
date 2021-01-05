@@ -13,11 +13,15 @@
     }
 
 function sanitize_html($data = []){
-    $sanitize_array = [];
-    foreach($data as $key => $value){
-        $sanitize_array[$key] = h($value);
+    if(!empty($data)){
+        $sanitize_array = [];
+        foreach($data as $key => $value){
+            $sanitize_array[$key] = h($value);
+        }
+        return $sanitize_array;
     }
-    return $sanitize_array;
+    return $data;
+    
 }
 
 function redirect_to($location){
@@ -51,7 +55,28 @@ function array_to_json($array,$exclude=null){
 }
 
 function json_to_array($json){
+    
     return json_decode($json,true);
+}
+
+function initialize_empty($data, $exclude_param =null){
+    $newData = [];
+    $data = !is_null($exclude_param) ? exclude_and_regenerate($data, $exclude_param) : $data; 
+    $columns = array_keys($data);
+    // $values = array_values($data);
+    foreach($data as $key=> $value){
+        if(in_array($key, $columns)){
+                $newData[$key] = "";
+        }
+
+    }
+    return $newData;
+
+}
+
+function generate_route($path, $type=null, $id=null){
+    return isset($type) && is_null($id) ? DASHBOARD_PATH.$path."/".$type :
+        (isset($type) && isset($id) ? DASHBOARD_PATH.$path."/".$id."/".$type: DASHBOARD_PATH.$path);
 }
 
 

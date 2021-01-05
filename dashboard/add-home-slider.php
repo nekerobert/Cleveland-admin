@@ -1,8 +1,12 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
 <?php
+	   /* Set Main Page Routes*/
+	   $route = "sliders";
+	   /* Page Route Ends Here*/
+	   
 	$errors = []; $status = false; $msg = ""; 
 	$editMode = false;
-	$formUrl = DASHBOARD_PATH.'sliders/create';
+	$formUrl = generate_route($route, "create");
 	$formTitle = "Create A New Slider";
 	if(isset($_GET['slider_id'])){
 		$id = h(u($_GET["slider_id"]));
@@ -26,6 +30,7 @@
 		$slider = sanitize_html($_POST);
 		// N/B : Delete and Edit operation is handle using post request method also
 		if(isset($_GET["mode"]) && isset($id)){
+			$formTitle = "Edit Selected Slider";
 			// Mode is for performing either edit or delete operation
 			switch ($_GET["mode"]) {
 				case 'edit':
@@ -59,7 +64,6 @@
 					$valResult = validate_data($slider, ['primary_title'=>'title'], 'csrf_token,enable_sec_title,secondary_title,enable_btn_one,btn_one_text,btn_one_link,btn_two_text,btn_two_link');
 					if(!$valResult){
 						// No errors
-
 						// Confirm if slider already exist by retrieving the image mapped to the slider
 						$file = find_data('files',['files.id','path'],'INNER JOIN page_datas ON files.id = page_datas.file_id','WHERE page_datas.title = "slider" AND page_datas.id ='.merge_and_escape([$id],$db));
 						if($file){
@@ -75,51 +79,63 @@
 							$slider["image"] = $file["path"];
 						}else{
 							// Id is unverified therefore request source is not accurate
-							redirect_to(DASHBOARD_PATH.'sliders/manage');
-
+								$msg = "Sorry request was not successful. Please try again";
+								$status = false;
+								cookie_message($msg, $status);
+								redirect_to(generate_route($route, "manage"));
 						}
 						
 					}else{
 						// Errors occured while uploading file
 						$errors = $valResult;
+						// Retrieve the file data to be redisplayed on the file form
+						$file = find_data('files',['files.id','path'],'INNER JOIN page_datas ON files.id = page_datas.file_id','WHERE page_datas.title = "slider" AND page_datas.id ='.merge_and_escape([$id],$db).' LIMIT 1');
+						$slider["file_id"] = $file["id"];
+						$slider["image"] = $file["path"];
 					}
 					break;
 					
 				case 'editFile':
 					$editMode = true;
 					$msg = "Slider Image Update failed. Please try again"; //Message to be displayed if update fails
-					$result = upload_file($_FILES["file"]);
-					if($result["mode"]){
-						// Retrieve file to be deleted
-						$data  = find_data('page_datas',['page_datas.id','content','path'],'INNER JOIN files ON page_datas.file_id = files.id',"WHERE files.id = ".merge_and_escape([$id],$db),false);
-						if($data){
-							$slider = json_to_array($data["content"]);
+					$data  = find_data('page_datas',['page_datas.id','content','path'],'INNER JOIN files ON page_datas.file_id = files.id',"WHERE files.id = ".merge_and_escape([$id],$db),false);
+					if($data){
+						$result = upload_file($_FILES["file"]);
+						if($result["mode"]){
+							// Retrieve file to be deleted
+							$slider = sanitize_html(json_to_array($data["content"]));
 							$result["id"] = $id;
 							$result["date_updated"] = date('Y-m-d H:i:s');
 							$slider["image"] = $data["path"];
-						// Update file record Here
-							if(update_data('files',$result,'id,mode')){
-									// Delete previous image from the server
-								if(unlink(UPLOAD_PATH.'/'.$data["path"])){
-									$status = true;
-									// update the previous slider path to the updated food path
-									$slider["image"] = $result["path"];
-									$slider["file_id"] = $result["id"];
-									$msg = "Slider image update was succesful";
-								}
+							if(unlink(UPLOAD_PATH.'/'.$data["path"])){// Delete the previous file
+									// Update data
+								update_data('files',$result,'id,mode');
+								$status = true;
+								// update the previous slider path to the updated food path
+								$slider["image"] = $result["path"];
+								$slider["file_id"] = $result["id"];
+								$msg = "slider Image was updated succesfully";
 							}
-						}else{
-							var_dump($data); exit;
-						}
-						}else{
-							// Errors occured while updating file
-							// Display Errors to the user
-							$errors = $result;
-								// Retrieve record to be displayed again on the form
-							$data  = find_data('page_datas',['page_datas.id','content','path'],'INNER JOIN files ON page_datas.file_id = files.id',"WHERE files.id = ".merge_and_escape([$id],$db),false);
-						}
-						
-						break;
+						else{
+							// Error occured during file upload
+							// Retrieve the slider content to be display in the page again
+							$slider = sanitize_html(json_to_array($data["content"]));
+							$slider["image"] = h($data["path"]);
+							$slider["id"] = h($data["id"]);
+							$slider["file_id"] = $id;
+							$editMode = true; 
+							$formUrl = generate_route($route, "edit", $tip["id"]);
+						}	
+					}else{
+						// User tempered with the record Id 
+						$msg = "Sorry file update was not successful. Please try again";
+						$status = false;
+						cookie_message($msg, $status);
+						redirect_to(generate_route($route, "manage"));
+					}
+				}
+			
+				break;
 			}
 		}else{
 				//Creating a new Slider
@@ -165,7 +181,7 @@
 						$status = insert_data('page_datas',$data);
 						$msg = "New slider created successfully";
 						cookie_message($msg, $status);
-						redirect_to(DASHBOARD_PATH.'sliders/create');
+						redirect_to(generate_route($route, "create"));
 					}else{
 						// Errors occured while uploading file
 						$errors = $result;
@@ -194,14 +210,13 @@
 						$formTitle = "Edit Selected Slider";
 						$editMode = true;
 					}else{
-						redirect_to(DASHBOARD_PATH.'sliders/manage');
+						redirect_to(generate_route($route, "manage"));
 					}
-					
 					# code...
 					break;
 				
 				default:
-				redirect_to(DASHBOARD_PATH.'sliders/manage');
+					redirect_to(generate_route($route, "manage"));
 			}
 			
 		}

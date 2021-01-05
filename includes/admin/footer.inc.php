@@ -12,7 +12,7 @@
 					        if ($startYear == $thisYear) {
 					          echo $startYear;
 					        }else{
-					          echo "{$startYear}-{thisYear}";
+					          echo "{$startYear}-{$thisYear}";
 					        }
 					      ?> Admin by <a href="#"> Cleveland</a></p>
 					    </div>
@@ -33,12 +33,11 @@
 
 	<script>
         $(document).ready(function () {
-            $('#bs4-table').DataTable();
+			console.log("Hello world");
+			$("#bs4-table").DataTable();
+			$('[data-toggle="tooltip"]').tooltip();
         });
-
-		$(document).ready(function(){
-  		$('[data-toggle="tooltip"]').tooltip();
-		});
+	
     </script>
 
 <!-- ckeditor script -->
