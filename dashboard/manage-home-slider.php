@@ -1,5 +1,8 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
 <?php
+	   /* Set Main Page Routes*/
+	   $route = "sliders";
+	   /* Page Route Ends Here*/
 	$errors = []; $status = false; $msg = ""; 
 	if(isset($_GET['slider_id'])){
 		$id = h(u($_GET["slider_id"]));
@@ -27,7 +30,7 @@
 			switch ($_GET["mode"]) {
 				case 'delete':
 					// confirm if the id is actually mapped to a slider
-					$msg = "Slider does'nt exist";
+					$msg = "Sorry request failed. Please try again";
 					$slider = find_data('page_datas',['id'],null,'WHERE page_datas.title="slider" AND page_datas.id ='.merge_and_escape([$id], $db));
 					if($slider){
 						// Slider Exists
@@ -36,7 +39,7 @@
 					}
 						// Set cookie message here
 					cookie_message($msg,$status);
-					redirect_to(DASHBOARD_PATH.'sliders/manage');
+					redirect_to(generate_route($route, "manage"));
 					break;
 				default:
 					# code...
@@ -50,7 +53,7 @@
 				case 'delete':
 					$msg = "You have not selected any slider";
 					cookie_message($msg);
-					redirect_to(DASHBOARD_PATH.'sliders/manage');
+					redirect_to(generate_route($route, "manage"));
 				break;
 			}
 		}else{
@@ -117,7 +120,7 @@
 												</div>
 										</div>
 							          <div class="card-body table-responsive">
-                                        <table id="table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                                        <table id="bs4-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                    <th>S/N</th>
@@ -125,7 +128,8 @@
                                                      <th>Secondary Title</th>
                                                     <th>Slider Image</th>
                                                     <th>Date Created</th>
-                                                     <th colspan="2">Actions</th>
+													 <th>&nbsp;</th>
+													 <th>&nbsp;</th>
                                                    
                                                      <!-- <th colspan="2">Action</th> -->
                                                 </tr>
@@ -137,8 +141,8 @@
                                                      <th>Secondary Title</th>
                                                     <th>Slider Image</th>
                                                     <th>Date Added</th>
-                                                    <th colspan="2">Action</th>
-                                                     <!-- <th colspan="2">Action</th> -->
+                                                    <th>&nbsp;</th>
+													 <th>&nbsp;</th>
                                                 </tr>
                                             </tfoot>
                                             <tbody>

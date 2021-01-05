@@ -1,7 +1,10 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
 <?php
+	/* Set Main Page Routes*/
+    	$route = "pages";
+   /* Page Route Ends Here*/
 	$errors = []; $status = false; $msg = ""; 
-	$formUrl = DASHBOARD_PATH.'pages/manage';
+	$formUrl = generate_route($route, "manage");
 	$formTitle = "Create A New Page";
 	if(isset($_GET['page_id'])){
 		$id = h(u($_GET["page_id"]));
@@ -33,12 +36,22 @@
 					// Id to used for updating record
 					if(!$valResult){
 						// No Errors Continue with Updating
-						$page["id"] = $id;
-						$status = update_data('pages',$page,'id,csrf_token');
-						$msg = "Page Updated Successfully";
-						// Set cookie message
-						cookie_message($status, $msg);
-						redirect_to(DASHBOARD_PATH.'pages/manage');
+						$data = find_data('pages',['id'],null," WHERE id =".merge_and_escape([$id],$db));
+						// Confirm if record exist
+						if($data){
+							$page["id"] = $id;
+							$status = update_data('pages',$page,'id,csrf_token');
+							$msg = "Page Updated Successfully";
+							// Set cookie message
+							cookie_message($status, $msg);
+							redirect_to(generate_route($route, "manage"));
+						}else{
+							$msg = "Sorry request failed. Please Try again ";
+							// Set cookie message
+							cookie_message($status, false);
+							redirect_to(generate_route($route, "manage"));
+						}
+						
 
 					}else{
 						// Errors Occured
@@ -50,11 +63,21 @@
 					break;
 
 				case 'delete':
-					$status = delete_data('pages', [$id]);
-					$msg = "Page deleted successfully";
-					// Set cookie message here
-					cookie_message($msg,$status);
-					redirect_to(DASHBOARD_PATH.'pages/manage');
+					// validate the existence of a record tied to the Id
+					$data = find_data('pages',['id'],null," WHERE id =".merge_and_escape([$id],$db));
+					if($data){
+						$status = delete_data('pages', [$id]);
+						$msg = "Page deleted successfully";
+						// Set cookie message here
+						cookie_message($msg,$status);
+						redirect_to(generate_route($route,"manage"));
+					}else{
+						$msg = "Sorry request failed. Please Try again ";
+						// Set cookie message
+						cookie_message($status, false);
+						redirect_to(generate_route($route, "manage"));
+					}
+					
 					break;
 				default:
 					# code...
@@ -86,10 +109,16 @@
 			switch ($_GET["mode"]) {
 				case 'edit':
 					$page = find_data_by_id('pages',['title'],$id);
-					$formUrl = DASHBOARD_PATH.'pages/'.$id.'/edit';
-					$formTitle = "Edit Selected Page";
-					// repopulate table again
-					$pages  = find_data('pages',['id','title','date_created']);
+					if($page){
+						$formUrl = generate_route($route, "edit",$id);
+						$formTitle = "Edit Selected Page";
+						// repopulate table again
+						$pages  = find_data('pages',['id','title','date_created']);
+					}else{
+						cookie_message("Sorry request Failed. Try again", false);
+						redirect_to(generate_route($route, "manage"));
+					}
+					
 					# code...
 					break;
 			}
@@ -155,23 +184,23 @@
 											</div>
 										</div>
 							            <div class="card-body table-responsive">
-                                        <table id="table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                                        	<table id="bs4-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>S/N</th>
                                                     <th>Page Title</th>
-                                                    <th>Date Added</th>
-													<th colspan="3">Actions</th>
-                                                    <!-- <th>Action</th> -->
+													<th>Date Added</th>
+													<th></th>
+													<th></th>
                                                 </tr>
                                             </thead>
                                             <tfoot>
                                                 <tr>
                                                     <th>S/N</th>
                                                     <th>Page Title</th>
-                                                    <th>Date Added</th>
-                                                    <th colspan="2">Actions</th>
-                                                    <!-- <th>Action</th> -->
+													<th>Date Added</th>
+													<th></th>
+													<th></th>
                                                 </tr>
                                             </tfoot>
                                             <tbody>

@@ -28,7 +28,7 @@
     }
 
     function confirm_result($result){
-        return $result->num_rows === 0 ? false : true;
+        return !$result ? false: ($result->num_rows === 0 ? false : true) ;
     }
 
     function exit_db ($msg, $result, $db){

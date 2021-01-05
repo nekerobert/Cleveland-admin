@@ -1,7 +1,73 @@
+<?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
+<?php
+	   /* Set Main Page Routes*/
+	   $route = "pages/home/sections/health-tips";
+	   /* Page Route Ends Here*/
+	$errors = []; $status = false; $msg = ""; 
+	if(isset($_GET['tip_id'])){
+		$id = h(u($_GET["tip_id"]));
+	}
+
+	if(isset($_COOKIE["message"])){
+		// Get Output Message from cookie
+	// It is placed here to avoid headers sent out before output error
+	// Information 
+		$msgArray = cookie_message();
+		$status = $msgArray["status"];
+		$msg = $msgArray["message"];
+			// Destroy cookie Message
+		destroy_cookie_message();
+	}
+
+	if(is_post_request()){
+		// confirm request's csrf identifier validity and duration
+		confirm_request_source();
+		// Sanitize to avoid xss attack
+		$tip = sanitize_html($_POST);
+		// N/B : Delete and Edit operation is handle using post request method also
+		if(isset($_GET["mode"]) && isset($id)){
+			// Mode is for performing either edit or delete operation
+			switch ($_GET["mode"]) {
+				case 'delete':
+					// confirm if the id is actually mapped to a slider
+					$msg = "Sorry request failed. Please try again";
+					$tip = find_data('page_datas',['id'],null,'WHERE page_datas.title="home-health-tip" AND page_datas.id ='.merge_and_escape([$id], $db));
+					if($tip){
+						// Slider Exists
+						$status = delete_data('page_datas', [$id]);
+						$msg = "Slider deleted successfully";
+					}
+						// Set cookie message here
+					cookie_message($msg,$status);
+					redirect_to(generate_route($route, "manage"));
+					break;
+				default:
+					# code...
+					break;
+			}
+		}
+
+	}else{
+		if(isset($_GET["mode"]) && isset($id)){
+			switch ($_GET["mode"]) {
+				case 'delete':
+					$msg = "You have not selected any Health Tip";
+					cookie_message($msg);
+					redirect_to(generate_route($route, "manage"));
+				break;
+			}
+		}else{
+			//display all pages if any
+			$tips  = find_data('page_datas',['page_datas.id','content','path','page_datas.date_created'],'INNER JOIN files ON page_datas.file_id = files.id',"WHERE page_datas.title='home-health-tip'",false);
+		}
+		
+	}
+
+?>
 
 <?php 
-include('includes/header.inc.php');
-include('includes/sidebar.inc.php');
+	require_once(INCLUDES_PATH.'/admin/header.inc.php');
+	require_once(INCLUDES_PATH.'/admin/sidebar.inc.php');
 ?>
 <!-- include headers stops -->
 
@@ -41,49 +107,44 @@ include('includes/sidebar.inc.php');
 					<!-- state start-->
 					<div class="row">
 						<!-- table starts -->
-						<div class="col-sm-12 col-md-12 col-lg-6 col-xs-12 col-xl-6">
+						<div class="col-sm-12">
 							<div class="row">
 								<div class="col-md-12">
 									<div class="card card-shadow mb-4">
-										<div class="card-header bg-info ">
+										<div class="card-header bg-info d-flex justify-content-between">
 											<div class="card-title text-white">
-												Health Tips Slider Image Table
+												All Health Tips
+											</div>
+											<div class="card-title text-white">
+												<a class="btn btn-dark" href="<?php echo generate_route($route,"create");?>"><i class="fa fa-pencil"></i> Create An Health Tip</a>
 											</div>
 										</div>
 							          <div class="card-body table-responsive">
                                         <table id="bs4-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th>S/N</th>
-                                                    <th>Health Tips Image</th>
+													<th>S/N</th>
+													<th>Tip title</th>
+                                                    <th>Feature Image</th>
                                                     <th>Date Added</th>
-                                                    <th>Edit</th>
-                                                    <th>Delete</th>
-                                                    <!-- <th>Action</th> -->
+                                                    <th>&nbsp;</th>
+                                                    <th>&nbsp;</th>
                                                 </tr>
                                             </thead>
                                             <tfoot>
                                                 <tr>
-                                                     <th>S/N</th>
-                                                    <th>Health Tips Image</th>
+                                                    <th>S/N</th>
+													<th>Tip title</th>
+                                                    <th>Feature Image</th>
                                                     <th>Date Added</th>
-                                                    <th>Edit</th>
-                                                    <th>Delete</th>
+                                                    <th>&nbsp;</th>
+                                                    <th>&nbsp;</th>
                                                     <!-- <th>Action</th> -->
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                <tr>
-                                                    <td></td>
-                                                    <td><img src="../images/gallery/01.jpg" class="img-thumbnail" alt="member"></td>
-                                                    <td></td>
-                                                    <td>
-                                                      <button type="submit" class="btn btn-success editbtn" name="editfaq" id="editId">Edit</button>
-                                                  </td>
-                                                  <td>
-                                                      <button type="submit" class="btn btn-danger confirmDelete" name="delete">Delete</button>
-                                                    </td>
-                                                </tr>
+											<?php 
+												echo tips_table_component($tips); ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -92,76 +153,10 @@ include('includes/sidebar.inc.php');
 							</div>
 						</div>
 						<!-- table ends -->
-
-						<!-- form statrts -->
-
-
-
-
-
-						<div class="col-sm-12 col-md-12 col-lg-6 col-xs-12 col-xl-6">
-							<div class="row">
-							<div class="col-md-12">
-									<div class="card  border-info lobicard-custom-control lobi-light  mb-4">
-										<div class="card-header bg-info ">
-											<div class="card-title text-white">
-												Manage Health Tips Details
-											</div>
-										</div>
-								<div class="card-body">
-									<form id="signupForm1" method="post" class=" right-text-label-form feedback-icon-form" action="#" novalidate="novalidate">
-										<div class="form-group row">
-											<label class="col-sm-4 control-label" for="sectitle">Tip Title</label>
-											<div class="col-sm-5">
-												<input type="text" class="form-control" id="sectitle" name="sectitle" placeholder="Tip Title">
-											</div>
-										</div>
-										<div class="form-group row">
-											<label class="col-sm-4 control-label" for="sectitle">Tip Subtitle</label>
-											<div class="col-sm-5">
-												<input type="text" class="form-control" id="sectitle" name="sectitle" placeholder="Tip Subtitle">
-											</div>
-										</div>
-										<div class="form-group row">
-											<div class="col-sm-8 ml-auto">
-												<div class="checkbox">
-													<label>
-														<input type="checkbox" id="agree" name="agree" value="agree"> Enable Tip Subtitle </label>
-												</div>
-											</div>
-										</div>
-										<div class="form-group row">
-											<label class="col-sm-4 control-label" for="secdesc">Tip Description</label>
-											<div class="col-sm-5">
-												 <textarea class="form-control" id="editor" name="" placeholder=" Health Tip Text"></textarea>
-											</div>
-										</div>
-										<div class="form-group row">
-											<label class="col-sm-4 control-label" for="username1">Tip Slider Image</label>
-											<div class="col-sm-5">
-												 <input type="file" multiple class="form-control" id="tipimg" name="tipimg" placeholder="Choose Tip Slider image" />
-											</div>
-										</div>
-										<div class="form-group row">
-											<div class="col-sm-8 ml-auto">
-												<button type="submit" class="btn btn-info" name="submit" value="submit">
-													Submit
-												</button>
-											</div>
-										</div>
-									</form>
-								</div>
-									</div>
-								</div>
-								</div>
-								</div>
-								</div>
-							</div>
-							</main>
+				</main>
 			<!--main contents end-->
 
+			<?php echo display_delete_modal('Health Tip'); ?>
+
 <!-- include footer starts-->
-<?php 
-include('includes/footer.inc.php');
-?>
-<!-- include footer stops
+<?php require_once(INCLUDES_PATH.'/admin/footer.inc.php');?>

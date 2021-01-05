@@ -62,11 +62,11 @@ RewriteRule ^dashboard/pages/manage /dashboard/manage_pages.php [NC,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^dashboard/pages/([a-zA-Z0-9-/]+)/edit$ /dashboard/manage_pages?page_id=$1&mode=edit [NC,L]
+RewriteRule ^dashboard/pages/([0-9-/]+)/edit$ /dashboard/manage_pages?page_id=$1&mode=edit [NC,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^dashboard/pages/([a-zA-Z0-9-/]+)/delete$ /dashboard/manage_pages?page_id=$1&mode=delete [NC,L]
+RewriteRule ^dashboard/pages/([0-9-/]+)/delete$ /dashboard/manage_pages?page_id=$1&mode=delete [NC,L]
 
 
 #Slider Routes
@@ -86,14 +86,61 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/sliders/([a-zA-Z0-9-/]+)/edit$ /dashboard/add-home-slider.php?slider_id=$1&mode=edit [NC,L]
 
-
-
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/sliders/([a-zA-Z0-9-/]+)/delete$ /dashboard/manage-home-slider.php?slider_id=$1&mode=delete [NC,L]
 
+#Home advert Routes
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/advert/([a-zA-Z0-9-/]+)/edit$ /dashboard/manage-advert.php?advert_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/advert$ /dashboard/manage-advert.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/resources/advert/file/([a-zA-Z0-9-/]+)/edit$ /dashboard/manage-advert.php?advert_id=$1&mode=editFile [NC,L]
 
 
+#Home health Section
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/health-tips/file/([a-zA-Z0-9-/]+)/edit$ /dashboard/add-health-tips.php?tip_id=$1&mode=editFile [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/health-tips/manage /dashboard/manage-health-tips.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/health-tips/([a-zA-Z0-9-/]+)/delete$ /dashboard/manage-health-tips.php?tip_id=$1&mode=delete [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/health-tips/([a-zA-Z0-9-/]+)/edit$ /dashboard/add-health-tips.php?tip_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/health-tips/create /dashboard/add-health-tips.php [NC,L]
+
+#Home Footer Banner
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/footer-banner/([a-zA-Z0-9-/]+)/edit$ /dashboard/footer-banner.php?banner_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/footer-banner/([a-zA-Z0-9-/]+)/delete$ /dashboard/footer-banner.php?banner_id=$1&mode=delete [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/footer-banner /dashboard/footer-banner.php [NC,L]
+
+
+#Page Routes
 #RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-d
 #RewriteRule ^pages/([a-zA-Z0-9_-]+)/?$ edit_chapter.php?chapter_id=$1 [NC,L]

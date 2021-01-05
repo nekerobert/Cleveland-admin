@@ -20,10 +20,10 @@
                 <td>'.$page["title"].'</td>
                 <td>'.formatted_date($page["date_created"]).'</td>
                 <td>
-                    <a data-toggle="tooltip" data-placement="top" title="Edit Page" class="btn btn-sm btn-warning" href="'.DASHBOARD_PATH.'pages/'.u($page['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Page" class="btn btn-sm text-white btn-warning" href="'.DASHBOARD_PATH.'pages/'.u($page['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
                 </td>
                 <td>
-                    <a data-toggle="tooltip" data-placement="top" title="Delete Page" class="btn btn-sm btn-danger" href="'.DASHBOARD_PATH.'pages/'.u($page['id']).'/delete'.'"><i class="fa fa-trash"></i></a>
+                    <a data-toggle="tooltip" data-placement="top" title="Delete Page" class="btn btn-sm text-white btn-danger" href="'.DASHBOARD_PATH.'pages/'.u($page['id']).'/delete'.'"><i class="fa fa-trash"></i></a>
                 </td>
             </tr>
         ';
@@ -39,11 +39,12 @@
                 <td>'.$page["title"].'</td>
                 <td>'.formatted_date($page["date_created"]).'</td>
                 <td>
-                    <a data-toggle="tooltip" data-placement="top" title="Edit Page" href="'.DASHBOARD_PATH.'pages/'.u($page['id']).'/edit'.'" class="btn btn-sm btn-warning edit-link" ><i class="fa fa-edit"></i></a>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Page" href="'.DASHBOARD_PATH.'pages/'.u($page['id']).'/edit'.'" class="btn btn-sm btn-warning text-white edit-link" ><i class="fa fa-edit"></i></a>
                 </td>
                 <td>
-                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($page["id"]).'" class="btn btn-sm btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($page["id"]).'" class="btn btn-sm btn-danger text-white delete-link"><i class="fa fa-trash"></i></a>
                 </td>
+                
             </tr>';
             $pageCount++;
             
@@ -97,10 +98,10 @@
                 <td><img class="img-fluid image-thumbnail" src="'.$slider["img"].'" /></td>
                 <td>'.formatted_date($slider["date_created"]).'</td>
                 <td>
-                    <a data-toggle="tooltip" data-placement="top" title="Edit Slider" class="btn btn-sm btn-warning" href="'.DASHBOARD_PATH.'sliders/'.u($slider['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Slider" class="btn btn-sm btn-warning text-white" href="'.DASHBOARD_PATH.'sliders/'.u($slider['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
                 </td>
                 <td>
-                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($slider["id"]).'" class="btn btn-sm btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($slider["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
                 </td>
             </tr>
         ';
@@ -128,6 +129,68 @@
                 <td>
                 <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($slider["id"]).'" class="btn btn-sm btn-danger delete-link"><i class="fa fa-trash"></i></a>
                 </td>
+            </tr>
+        ';
+            $pageCount++;
+            
+        }
+            
+        }
+
+        return $str;
+        
+    }
+    
+    function tips_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(6);
+
+        }elseif(is_array($result)){
+            $tip = regenerate_with_required(json_to_array($result["content"]), 'tip_title');
+            $tip["id"] = $result["id"];
+            $tip["date_created"] = $result["date_created"];
+            $tip["img"] = full_upload_url($result["path"]);
+            // sanitize to avoid xss attack
+            $tip = sanitize_html($tip);
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$tip["tip_title"].'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$tip["img"].'" /></td>
+                <td>'.formatted_date($tip["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Health Tip" class="btn btn-sm btn-warning text-dark" href="'.DASHBOARD_PATH.'pages/home/sections/health-tips/'.u($tip['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($tip["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+                $data = json_to_array($record["content"]);
+                $tip = regenerate_with_required($data, 'tip_title');
+                $tip["id"] = $record["id"];
+                $tip["date_created"] = $record["date_created"];
+                $tip["img"] = full_upload_url($record["path"]);
+                // Sanitize to avoid xss attack
+                $tip = sanitize_html($tip);
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$tip["tip_title"].'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$tip["img"].'"/></td>
+                <td>'.formatted_date($tip["date_created"]).'</td>
+                <td>
+                <a data-toggle="tooltip" data-placement="top" title="Edit Health Tip" class="btn btn-sm btn-warning text-dark" href="'.DASHBOARD_PATH.'pages/home/sections/health-tips/'.u($tip['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+            </td>
+            <td>
+            <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($tip["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+            </td>
             </tr>
         ';
             $pageCount++;
