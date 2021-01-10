@@ -140,6 +140,67 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/home/sections/footer-banner /dashboard/footer-banner.php [NC,L]
 
 
+#Key strength Section
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/key-strength/([a-zA-Z0-9-/]+)/edit$ /dashboard/strength-section.php?section_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/key-strength/([a-zA-Z0-9-/]+)/delete$ /dashboard/strength-section.php?section_id=$1&mode=delete [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/key-strength /dashboard/strength-section.php [NC,L]
+
+#Home Key Strength Items
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/strength-items/file/([a-zA-Z0-9-/]+)/edit$ /dashboard/add-strength-items.php?item_id=$1&mode=editFile [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/strength-items/manage /dashboard/manage-strength-items.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/strength-items/([a-zA-Z0-9-/]+)/delete$ /dashboard/manage-strength-items.php?item_id=$1&mode=delete [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/strength-items/([a-zA-Z0-9-/]+)/edit$ /dashboard/add-strength-items.php?item_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/strength-items/create /dashboard/add-strength-items.php [NC,L]
+
+#Home Equipment Section
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/equipment-section/([a-zA-Z0-9-/]+)/edit$ /dashboard/equipment-section.php?section_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/equipment-section/([a-zA-Z0-9-/]+)/delete$ /dashboard/equipment-section.php?section_id=$1&mode=delete [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/equipment-section /dashboard/equipment-section.php [NC,L]
+
+#Home Equipment Items
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/equipment-items/([a-zA-Z0-9-/]+)/edit$ /dashboard/equipment-items.php?item_id=$1&mode=editFile [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/equipment-items/([a-zA-Z0-9-/]+)/delete$ /dashboard/equipment-items.php?item_id=$1&mode=deleteFile [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/home/sections/equipment-items/manage$ /dashboard/equipment-items.php [NC,L]
+
+
 #Page Routes
 #RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-d

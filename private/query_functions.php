@@ -20,6 +20,9 @@
     function insert_data($table, $data, $exclude =null){
         global $db;
        $sql =  generateInsertSql($table, $data, $db, $exclude);
+
+       echo $sql;
+
         $result = mysqli_query($db, $sql);
         return exit_db("Error Occurred While Inserting Data",$result, $db); //result is always true here
     
@@ -48,6 +51,33 @@
         $sql = generateUpdateSql($table, $data, $db, $exclude, $limit);
         $result = mysqli_query($db, $sql);
         return exit_db("Error Occurred While Updating Data",$result, $db); //result is always true here
+    }
+    
+    function insert_multiple_data($table, $data){
+        global $db;
+        $indexEl = array_shift($data);
+        $columns = array_keys($indexEl);
+        $str = "INSERT INTO {$table} (";
+        $str.= merge_columns_to_str($columns); //convert columns to string
+        $str.=")";
+        $str.=" VALUES ";
+        array_unshift($data, $indexEl);
+        foreach ($data as $value) {
+            $str.="( ";
+             //convert values to string and escape special characters
+            $str.= merge_and_escape($value,$db);
+            $str.="), ";
+        }
+
+        $str = rtrim($str, ', ');
+
+        $result = mysqli_query($db, $str);
+        return exit_db("Error Occurred While Inserting Data",$result, $db);
+        
+        // array_unshift($data, $indexEl);
+       
+
+
     }
 
 

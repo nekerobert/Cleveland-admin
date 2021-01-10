@@ -8,6 +8,7 @@ $allowed_extensions = ['png','jpg', 'jpeg'];
 
 $check_is_image = true;
 $check_for_php = true;
+$max_file_size = 500000; //Max File Size is 500kb
 
 // Provides plain-text error messages for file upload errors.
 function file_upload_error($error_integer) {
@@ -63,77 +64,166 @@ function resizeImage($resourceType,$image_width,$image_height,$resize_width=null
     return $imageLayer;
 }
 
-function upload_file($file) {
-	global $upload_path, $max_file_size, $allowed_mime_types, $allowed_extensions, $check_is_image, $check_for_php;
+function validate_files($data = []){
+	global $max_file_size, $allowed_mime_types, $allowed_extensions, $check_is_image, $check_for_php;
 	$errors = [];
+	if($data["error"] > 0) {
+		// Display errors caught by PHP
+		$errors[] =  "Error: " . file_upload_error($data["error"]);
+	} 
 	
-	if(!empty($file["name"]) && !empty($file["type"]) && !empty($file["tmp_name"])) {
-		$result = sanitize_file_name($file['name']);
-		$file_extension = file_extension($file["name"]);
-		$file_type = $file['type'];
-		$tmp_file = $file['tmp_name'];
-		$error = $file['error'];
-		$file_size = $file['size'];
-		$file_path = $upload_path . '/' . $result["file_url_name"].".".$file_extension;
-				
-		if($error > 0) {
-			// Display errors caught by PHP
-			$errors[] =  "Error: " . file_upload_error($error);
-		} 
-		
-		if(!is_uploaded_file($tmp_file)) {
-			$errors[] =  "Error: Does not reference a recently uploaded file.<br />";	
-		} 
-		
-		if(!in_array($file_type, $allowed_mime_types)) {
-			$errors[] = "Not an allowed mime type.";
+	if(!is_uploaded_file($data["tmp_name"])) {
+		$errors[] =  "Error: Does not reference a recently uploaded file.<br />";	
+	} 
+	
+	if(!in_array($data["file_type"], $allowed_mime_types)) {
+		$errors[] = "Not an allowed mime type.";
 
-		} 
-		
-		if(!in_array($file_extension, $allowed_extensions)) {
-			$errors[] = "Not an allowed file extension.";
-		
-		} 
-		
-		if($check_is_image && (getimagesize($tmp_file) === false)) {
-			$errors[] = "Not a valid image file.";
-		} 
-		
-		if($check_for_php && file_contains_php($file)) {
-			// A valid image can still contain embedded PHP.
-			$errors[] = "File contains PHP code.";
+	} 
 	
-		} 
+	if(!in_array($data["file_extension"], $allowed_extensions)) {
+		$errors[] = "Not an allowed file extension.";
+	
+	} 
+	
+	if($check_is_image && (getimagesize($data["tmp_name"]) === false)) {
+		$errors[] = "Not a valid image file.";
+	} 
+	
+	if($check_for_php && file_contains_php(["tmp_name"=>$data["tmp_name"],"size"=>$data["file_size"]])) {
+		// A valid image can still contain embedded PHP.
+		$errors[] = "File contains PHP code.";
+
+	} 
+	
+	if(file_exists($data["file_path"] )) {
+		$errors[] = "A file with that name already exists in target location";
 		
-		if(file_exists($file_path)) {
-			$errors[] = "A file with that name already exists in target location";
+	} 
+	
+	if ($data["file_size"] > $max_file_size) {
+		$errors[] = "File size must not exceed 500KB";
+	} 
+
+	return $errors;
+
+}
+
+function upload_file($file, $multiple=false, $title="") {
+	global $upload_path;
+	$errors = []; $processFile = [];
+	if(!$multiple){
+		if(!empty($file["name"]) && !empty($file["type"]) && !empty($file["tmp_name"])) {
+			$result = sanitize_file_name($file['name']);
+			$processFile["file_extension"] = file_extension($file["name"]);
+			$processFile["file_type"] = $file['type'];
+			$processFile["tmp_name"] = $file['tmp_name'];
+			$processFile["error"] = $file['error'];
+			$processFile["file_size"] = $file['size'];
+			$processFile["file_path"] = $upload_path . '/' . $result["file_url_name"].".".$processFile["file_extension"];
+			$processFile["file"] = 	$file;
 			
-		} 
+			// Validate the file
+			$errors = validate_files($processFile);
 		
-		if(empty($errors)){
-			// Upload the file
-			if(move_uploaded_file($tmp_file, $file_path)) {
-				$response["name"] = $result["name"];
-				$response["path"] = $result["file_url_name"].".".$file_extension;
-				$response["type"] = $file_type;
-				$response["mode"] = true;
-				return $response;
+			if(empty($errors)){
+				// Upload the file
+				if(move_uploaded_file($processFile["tmp_name"], $processFile["file_path"])) {
+					$response["name"] = $result["name"];
+					$response["path"] = $result["file_url_name"].".".$processFile["file_extension"];
+					$response["type"] = $processFile["file_type"];
+					$response["mode"] = true;
+					return $response;
+				}else{
+					$errors[] = "Error occured While uploading File";
+					$errors["mode"] = false; //differentiate the error array from success array
+					return $errors;
+				}
+				// return $success;
 			}else{
+				$errors["mode"] = false; //differentiate the error array from success array
+				return $errors;
+			}
+		}
+		else{
+			$errors[] = "File was not uploaded ";
+			$errors["mode"] = false; //differentiate the error array from success array
+			return $errors;
+		}
+	}else{
+		// Handling Uploading of multiple files
+		$resultArray = [];
+		
+		$fileNames = array_filter($file["name"]);
+		/**
+		 * No File was Uploaded
+		 */
+		if(!empty($filesNames)){
+			$errors[] = "File(s) not uploaded ";
+			$errors["mode"] = false; //differentiate the error array from success array
+			return $errors;
+		}
+		/**
+		 * Files submitted, therefore began processing, validating and uploading of files 
+		 */
+		foreach ($fileNames as $key => $value) {
+			$result = sanitize_file_name($file["name"][$key]);
+			$processFile["file_extension"] = file_extension($file["name"][$key]);
+			$processFile["file_type"]  = $file['type'][$key];
+			$processFile["tmp_name"] = $file['tmp_name'][$key];
+			$processFile["error"] = $file['error'][$key];
+			$processFile["file_size"] = $file['size'][$key];
+			$processFile["file_path"] = $upload_path . '/' . $result["file_url_name"].".".$processFile["file_extension"];
+			// $processFile["file"] = 	$file;
+			// $result = sanitize_file_name($file['name']);
+			/**
+			 * Check and validate files
+			 */
+			$errors = validate_files($processFile);
+
+			/**
+			 * Errors occured during file validation therefore stop futher processing and returned the current error information to the user
+			 */
+			if(!empty($errors)){
+					// Errors occured while uploading
+				$errors["mode"] = false; //differentiate the error array from success array
+				return $errors;
+			}
+			
+			/**
+			 * Errors did'nt occur during validation. Proceed to uploading of file
+			 * If errors occured during uploading of files, stop processing of other files and return the error information to the user
+			 */
+			if(!move_uploaded_file($processFile["tmp_name"], $processFile["file_path"])) {
 				$errors[] = "Error occured While uploading File";
 				$errors["mode"] = false; //differentiate the error array from success array
 				return $errors;
 			}
-			// return $success;
-		}else{
-			$errors["mode"] = false; //differentiate the error array from success array
-			return $errors;
+			
+			/**
+			 * Uploading Of current file was succesful. Therefore arrange the file and move it into the result array
+			 * This response array will subsequently be persisted in the database
+			 * This is a customized section of this code just for this project.
+			 */
+			// $response["name"] = $result["name"];
+			$path = $result["file_url_name"].".".$processFile["file_extension"];
+			$response["content"] = array_to_json(['path'=> $path]);
+			// $response["type"] = $processFile["file_type"];
+			$response["title"] = $title;
+			$resultArray[] = $response;
 		}
+		
+		/**
+		 * Uploading of all files was succesful. Therefore return the multi-dimensional array containing all arrays of uploaded files;
+		 * Specify additional element of key mode which will be use to differentiate the error(s)-containing array from the success containing array.
+		 */
+
+		$resultArray["mode"] = true;
+		
+		return $resultArray;
 	}
-	else{
-		$errors[] = "File was not uploaded ";
-		$errors["mode"] = false; //differentiate the error array from success array
-		return $errors;
-	}
+	
+	
 
 }
 

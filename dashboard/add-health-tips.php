@@ -130,31 +130,31 @@
 					redirect_to(generate_route($route,"manage"));
 			}
 		}else{
-				//Creating a new Health tip
-				// Rearrange data values
-            $tip["enable_tip_subtitle"] = !$_POST["enable_tip_subtitle"] ? "0":"1";
 			// validate Data
 			// N/B: validation is done only on the advert title if the advert section is selected
 			$valResult = validate_data(regenerate_with_required($tip,"tip_title"), ['tip_title'=>'title']);
+			//Creating a new Health tip
 			if(!$valResult){
-					$file = $_FILES["file"];
-					$result = upload_file($file);
-					if($result["mode"]){
+				// Rearrange data values
+				$tip["enable_tip_subtitle"] = !$_POST["enable_tip_subtitle"] ? "0":"1";
+				$file = $_FILES["file"];
+				$result = upload_file($file);
+				if($result["mode"]){
 						// No errors
-						insert_data('files',$result,'mode');
+					insert_data('files',$result,'mode');
 						// Prepare slider values to be inserted
-						$data["file_id"] = get_id($db);
-						$data["content"] = array_to_json($tip,'csrf_token');
-						$data["title"] = "home-health-tip";
-						$data["date_created"] = date('Y-m-d h:i:s');
-						$status = insert_data('page_datas',$data);
-						$msg = "New Health-tip was created successfully";
-						cookie_message($msg, true);
-						redirect_to(generate_route($route, "create"));
-					}else{
-						// Errors occured while uploading file
-							$errors = $result;
-					}
+					$data["file_id"] = get_id($db);
+					$data["content"] = array_to_json($tip,'csrf_token');
+					$data["title"] = "home-health-tip";
+					$data["date_created"] = date('Y-m-d h:i:s');
+					$status = insert_data('page_datas',$data);
+					$msg = "New Health-tip was created successfully";
+					cookie_message($msg, true);
+					redirect_to(generate_route($route, "create"));
+				}else{
+					// Errors occured while uploading file
+					$errors = $result;
+				}
 
 			}else{
 				// Validation errors are available here

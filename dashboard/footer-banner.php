@@ -44,11 +44,11 @@
 					// This is because they are optional
 					if(!$valResult){
 						// No errors
-						// Confirm if advert already exist by retrieving the image mapped to the advert
-						$data = find_data('page_datas',['id'],' WHERE page_datas.title = "home-footer-banner" AND page_datas.id ='.merge_and_escape([$id],$db).' LIMIT 1');
+						// Confirm if banner already exist by retrieving the record based on the Id
+						$data = find_data('page_datas',['id'],' WHERE page_datas.title = "home-footer-banner" AND page_datas.id ='.merge_and_escape([$id],$db).' LIMIT 1', false);
 						if($data){
 							// File Exist
-							// Prepare data values to be inserted
+							// Prepare data values to be Updated
 							$data["content"] = array_to_json($banner,'csrf_token');
 							$data["date_updated"] = date('Y-m-d h:i:s');
 							$status = update_data('page_datas',$data,'id');
@@ -103,7 +103,7 @@
 					if($data){
 						$banner = json_to_array($data["content"]);
 						$formUrl = generate_route($route, "edit", $id);
-						$formTitle = "Edit Hompage Footer Banner";
+						$formTitle = "Edit Homepage Footer Banner";
 						// var_dump($banner); exit;
 					}else{
 						//User tempered with the query string parameter
@@ -122,7 +122,7 @@
 			
 		}else{
 			// Default Get Request to the page
-			$data = find_data('page_datas',['content','page_datas.id'], ' WHERE page_datas.title ="home-footer-banner" LIMIT 1');
+			$data = find_data('page_datas',['content','page_datas.id'], ' WHERE page_datas.title ="home-footer-banner" LIMIT 1', false);
 			if($data){
 				$banner = sanitize_html(json_to_array($data["content"]));
 				$banner["id"] = h(u($data["id"]));

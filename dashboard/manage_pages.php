@@ -43,7 +43,7 @@
 							$status = update_data('pages',$page,'id,csrf_token');
 							$msg = "Page Updated Successfully";
 							// Set cookie message
-							cookie_message($status, $msg);
+							cookie_message($msg,$status);
 							redirect_to(generate_route($route, "manage"));
 						}else{
 							$msg = "Sorry request failed. Please Try again ";
