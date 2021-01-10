@@ -34,35 +34,36 @@
 			// Mode is for performing either edit or delete operation
 			switch ($_GET["mode"]) {
 				case 'edit':
-					// Rearrange data values
-					if(!$_POST["enable_sec_title"]){
-						$slider["enable_sec_title"] = 0;
-						$slider["secondary_title"] = "";
-					}else{
-						$slider["enable_sec_title"] = 1;
-					}
-
-					if(!$_POST["enable_btn_one"]){
-						$slider["enable_btn_one"] = 0;
-						$slider["btn_one_text"] = "";
-						$slider["btn_one_link"] = "";
-					}else{
-						$slider["enable_btn_one"] = 1;
-					}
-
-					if(!$_POST["enable_btn_two"]){
-						$slider["enable_btn_two"] = 0;
-						$slider["btn_two_text"] = "";
-						$slider["btn_two_link"] = "";
-					}else{
-						$slider["enable_btn_two"] = 1;
-					}
-					// Creating a new Slider is handle here
 					// validate Data
 					// N/B data not validated is specify as the third parameter oof validate_data function
 					// This is because they are optional
-					$valResult = validate_data($slider, ['primary_title'=>'title'], 'csrf_token,enable_sec_title,secondary_title,enable_btn_one,btn_one_text,btn_one_link,btn_two_text,btn_two_link');
+					$editMode = true; //Set Edit Mode
+					$valResult = validate_data(regenerate_with_required($slider,'primary_title'), ['primary_title'=>'title']);
 					if(!$valResult){
+							// Rearrange data values
+						if(!$_POST["enable_sec_title"]){
+							$slider["enable_sec_title"] = 0;
+							$slider["secondary_title"] = "";
+						}else{
+							$slider["enable_sec_title"] = 1;
+						}
+
+						if(!$_POST["enable_btn_one"]){
+							$slider["enable_btn_one"] = 0;
+							$slider["btn_one_text"] = "";
+							$slider["btn_one_link"] = "";
+						}else{
+							$slider["enable_btn_one"] = 1;
+						}
+
+						if(!$_POST["enable_btn_two"]){
+							$slider["enable_btn_two"] = 0;
+							$slider["btn_two_text"] = "";
+							$slider["btn_two_link"] = "";
+						}else{
+							$slider["enable_btn_two"] = 1;
+						}
+					// Creating a new Slider is handle here
 						// No errors
 						// Confirm if slider already exist by retrieving the image mapped to the slider
 						$file = find_data('files',['files.id','path'],'INNER JOIN page_datas ON files.id = page_datas.file_id','WHERE page_datas.title = "slider" AND page_datas.id ='.merge_and_escape([$id],$db));
@@ -70,28 +71,30 @@
 							// File Exist
 							// Prepare slider values to be inserted
 							$data["content"] = array_to_json($slider,'csrf_token');
-							$data["date_updated"] = date('Y-m-d h:i:s');
+								$data["date_updated"] = date('Y-m-d h:i:s');
 							$data["id"] = $id;
 							$status = update_data('page_datas',$data,'id');
 							$msg = "Slider information updated successfully";
 							$editMode = true;
 							$slider["file_id"] = $file["id"];
 							$slider["image"] = $file["path"];
-						}else{
+					}else{
 							// Id is unverified therefore request source is not accurate
-								$msg = "Sorry request was not successful. Please try again";
-								$status = false;
-								cookie_message($msg, $status);
-								redirect_to(generate_route($route, "manage"));
-						}
+						$msg = "Sorry request was not successful. Please try again";
+						$status = false;
+						cookie_message($msg, $status);
+						redirect_to(generate_route($route, "manage"));
+					}
 						
 					}else{
-						// Errors occured while uploading file
+						// Errors occured while Handling form validating
 						$errors = $valResult;
 						// Retrieve the file data to be redisplayed on the file form
 						$file = find_data('files',['files.id','path'],'INNER JOIN page_datas ON files.id = page_datas.file_id','WHERE page_datas.title = "slider" AND page_datas.id ='.merge_and_escape([$id],$db).' LIMIT 1');
 						$slider["file_id"] = $file["id"];
 						$slider["image"] = $file["path"];
+						$formUrl = generate_route($route, "edit",$id,);
+
 					}
 					break;
 					
@@ -138,6 +141,9 @@
 				break;
 			}
 		}else{
+			// This is because they are optional
+			$valResult = validate_data($slider, ['primary_title'=>'title'], 'csrf_token,enable_sec_title,secondary_title,enable_btn_one,btn_one_text,btn_one_link,btn_two_text,btn_two_link');
+			if(!$valResult){
 				//Creating a new Slider
 				// Rearrange data values
 				if(!$_POST["enable_sec_title"]){
@@ -165,27 +171,24 @@
 			// Creating a new Slider is handle here
 			// validate Data
 			// N/B data not validated is specify as the third parameter oof validate_data function
-			// This is because they are optional
-			$valResult = validate_data($slider, ['primary_title'=>'title'], 'csrf_token,enable_sec_title,secondary_title,enable_btn_one,btn_one_text,btn_one_link,btn_two_text,btn_two_link');
-			if(!$valResult){
-					$file = $_FILES["file"];
-					$result = upload_file($file);
-					if($result["mode"]){
-						// No errors
-						insert_data('files',$result,'mode');
+				$file = $_FILES["file"];
+				$result = upload_file($file);
+				if($result["mode"]){
+					// No errors
+					insert_data('files',$result,'mode');
 						// Prepare slider values to be inserted
-						$data["file_id"] = get_id($db);
-						$data["content"] = array_to_json($slider,'csrf_token');
-						$data["title"] = "slider";
-						$data["date_created"] = date('Y-m-d h:i:s');
-						$status = insert_data('page_datas',$data);
-						$msg = "New slider created successfully";
-						cookie_message($msg, $status);
-						redirect_to(generate_route($route, "create"));
-					}else{
-						// Errors occured while uploading file
-						$errors = $result;
-					}
+					$data["file_id"] = get_id($db);
+					$data["content"] = array_to_json($slider,'csrf_token');
+					$data["title"] = "slider";
+					$data["date_created"] = date('Y-m-d h:i:s');
+					$status = insert_data('page_datas',$data);
+					$msg = "New slider created successfully";
+					cookie_message($msg, $status);
+					redirect_to(generate_route($route, "create"));
+				}else{
+					// Errors occured while uploading file
+					$errors = $result;
+				}
 
 			}else{
 				// There is errors
@@ -327,10 +330,11 @@
 													<?php echo form_error_component($errors, 'primary_title');?>
 												</div>
 												<div class="form-check">
-														<input type="checkbox" <?php echo isset($slider["enable_sec_title"]) && $slider["enable_sec_title"] == '1' ? 'checked':'';?> id="enable-sec-title" name="enable_sec_title"> 		
+												<?php //echo (int) $slider["enable_sec_title"]; exit?>
+														<input type="checkbox" <?php echo isset($slider["enable_sec_title"]) &&  $slider["enable_sec_title"] == '1' || $slider["enable_sec_title"] =="on" ? 'checked':'';?> id="enable-sec-title" name="enable_sec_title"> 		
 														<label for="agree" class="form-check-label">Enable secondary title </label>
 												</div>
-												<div class="btn-wrapper <?php echo isset($slider["enable_sec_title"]) && $slider["enable_sec_title"] == '1' ? '':'d-none';?> ">
+												<div class="btn-wrapper <?php echo isset($slider["enable_sec_title"]) && $slider["enable_sec_title"] == '1' ||  $slider["enable_sec_title"] == "on" ? '':'d-none';?> ">
 													<div class="form-group">
 														<label class="control-label" for="sectitle">Secondary Title</label>
 														<input type="text" class="form-control" id="sectitle" value="<?php echo $slider["secondary_title"] ?? "";?>" name="secondary_title" placeholder="Secondary Title">
@@ -338,10 +342,10 @@
 												</div>
 												
 												<div class="form-check">
-													<input type="checkbox" id="enable-sec-title" <?php echo isset($slider["enable_btn_one"]) && $slider["enable_btn_one"] == '1' ? 'checked':'';?> name="enable_btn_one"> 		
+													<input type="checkbox" id="enable-sec-title" <?php echo isset($slider["enable_btn_one"]) && $slider["enable_btn_one"] == '1' || $slider["enable_btn_one"] == "on"? 'checked':'';?> name="enable_btn_one"> 		
 													<label for="agree" class="form-check-label"> Enable button one </label>
 												</div>
-												<div class="btn-wrapper <?php echo isset($slider["enable_btn_one"]) && $slider["enable_btn_one"] == '1' ? '':'d-none';?>">
+												<div class="btn-wrapper <?php echo isset($slider["enable_btn_one"]) && $slider["enable_btn_one"] == '1' || $slider["enable_btn_one"] == "on" ? '':'d-none';?>">
 													<div class="form-group">
 														<label class="control-label" for="">Button one Text</label>
 														<input type="text" class="form-control" id="btn-one-text" value="<?php echo $slider["btn_one_text"] ?? "";?>" name="btn_one_text" placeholder="Button one text">
@@ -352,10 +356,10 @@
 													</div>
 												</div>
 												<div class="form-check">
-														<input type="checkbox" id="enable-btn-two" <?php echo isset($slider["enable_btn_two"]) && $slider["enable_btn_two"] == '1' ? 'checked':'';?> name="enable_btn_two"> 		
+														<input type="checkbox" id="enable-btn-two" <?php echo isset($slider["enable_btn_two"]) && $slider["enable_btn_two"] == '1' || $slider["enable_btn_two"] == "on" ? 'checked':'';?> name="enable_btn_two"> 		
 														<label for="agree" class="form-check-label"> Enable button two </label>
 												</div>
-												<div class="btn-wrapper <?php echo isset($slider["enable_btn_two"]) && $slider["enable_btn_two"] == '1' ? '':'d-none';?> ">
+												<div class="btn-wrapper <?php echo isset($slider["enable_btn_two"]) && $slider["enable_btn_two"] == '1' || $slider["enable_btn_two"] =="on" ? '':'d-none';?> ">
 													<div class="form-group">
 														<label class="control-label" for="sectitle">Button two text</label>
 														<input type="text" class="form-control" id="btn-two-text" value="<?php echo $slider["btn_two_text"] ?? "";?>" name="btn_two_text" placeholder="Button two text">

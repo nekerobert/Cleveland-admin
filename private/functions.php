@@ -16,7 +16,7 @@ function sanitize_html($data = []){
     if(!empty($data)){
         $sanitize_array = [];
         foreach($data as $key => $value){
-            $sanitize_array[$key] = h($value);
+            $sanitize_array[$key] = trim(h($value));
         }
         return $sanitize_array;
     }
@@ -47,6 +47,15 @@ function formatted_date($date){
     return $str;
 }
 
+function clean_json($json){
+    // for($i = 0; $i <= 31; ++$i){ $json = str_replace(chr($i), "", $json);}
+    // $json = str_replace(chr(127),"",$json);
+    // if(0 === strpos(bin2hex($json), 'efbbbf')){$json = substr($json,3);}
+    // $json = stripslashes($json);
+    $json = str_replace('&quot;','"',$json);
+    return $json;
+}
+
 function array_to_json($array,$exclude=null){
     if(!is_null($exclude)){
         $array = exclude_and_regenerate($array,$exclude);
@@ -55,8 +64,7 @@ function array_to_json($array,$exclude=null){
 }
 
 function json_to_array($json){
-    
-    return json_decode($json,true);
+    return json_decode(clean_json($json),true);
 }
 
 function initialize_empty($data, $exclude_param =null){

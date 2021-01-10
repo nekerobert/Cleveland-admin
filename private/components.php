@@ -57,6 +57,8 @@
     }
 
     function display_delete_modal($data){
+       $hiddenEle = isset($_SESSION['csrf_token']) ? "<input type=\"hidden\" name=\"csrf_token\" value=\"".$_SESSION['csrf_token']."\">": csrf_token_tag();
+        
        return '<div id="deletemodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deletemodal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -67,7 +69,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    '.csrf_token_tag().'
+                    '.$hiddenEle.'
                 </div>
             </div>
         </div>
@@ -202,5 +204,128 @@
         return $str;
         
     }
+
+    function items_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(6);
+
+        }elseif(is_array($result)){
+            $item = regenerate_with_required(json_to_array($result["content"]), 'item_title');
+            $item["id"] = $result["id"];
+            $item["date_created"] = $result["date_created"];
+            $item["img"] = full_upload_url($result["path"]);
+            // sanitize to avoid xss attack
+            $item = sanitize_html($item);
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$item["item_title"].'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$item["img"].'" /></td>
+                <td>'.formatted_date($item["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Health Tip" class="btn btn-sm btn-warning text-dark" href="'.DASHBOARD_PATH.'pages/home/sections/strength-items/'.u($item['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($item["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+                $data = json_to_array($record["content"]);
+                $item = regenerate_with_required($data, 'item_title');
+                $item["id"] = $record["id"];
+                $item["date_created"] = $record["date_created"];
+                $item["img"] = full_upload_url($record["path"]);
+                // Sanitize to avoid xss attack
+                $item = sanitize_html($item);
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$item["item_title"].'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$item["img"].'"/></td>
+                <td>'.formatted_date($item["date_created"]).'</td>
+                <td>
+                <a data-toggle="tooltip" data-placement="top" title="Edit Key Strength" class="btn btn-sm btn-warning text-dark" href="'.DASHBOARD_PATH.'pages/home/sections/strength-items/'.u($item['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+            </td>
+            <td>
+            <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($item["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+            </td>
+            </tr>
+        ';
+            $pageCount++;
+            
+        }
+            
+        }
+
+        return $str;
+        
+    }
+
+    function equipment_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(5);
+
+        }elseif(is_array($result)){
+            $item = json_to_array($result["content"]);
+            $item["id"] = $result["id"];
+            $item["date_created"] = $result["date_created"];
+            $item["img"] = full_upload_url($item["path"]);
+            // sanitize to avoid xss attack
+            $item = sanitize_html($item);
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$item["img"].'" /></td>
+                <td>'.formatted_date($item["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Update Equipment Image" class="btn btn-sm btn-warning text-dark" href="'.DASHBOARD_PATH.'pages/home/sections/equipments/'.u($item['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($item["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+                $item = json_to_array($record["content"]);
+                $item["id"] = $record["id"];
+                $item["date_created"] = $record["date_created"];
+                $item["img"] = full_upload_url($item["path"]);
+                // Sanitize to avoid xss attack
+                $item = sanitize_html($item);
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$item["img"].'" /></td>
+                <td>'.formatted_date($item["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Update Equipment Image" class="btn btn-sm btn-warning text-dark" href="'.DASHBOARD_PATH.'pages/home/sections/equipment-items/'.u($item['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($item["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+            $pageCount++;
+            
+        }
+            
+        }
+
+        return $str;
+        
+    }
+
+    
 
 ?>

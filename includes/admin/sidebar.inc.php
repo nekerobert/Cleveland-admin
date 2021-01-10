@@ -107,30 +107,30 @@
 						<a href="#" class="dcjq-parent active"> <i class="fa fa-wpforms"></i> <span>Home Slider</span> <span class="arrow"></span> <span class="dcjq-icon"></span></a>
 								<ul class="down_menu lavel3" style="display: block;">
 									<li>
-										<a href="add-home-slider.php">Add Home Slider</a>
+										<a href="<?php echo DASHBOARD_PATH.'sliders/create'?>">Add Home Slider</a>
 									</li>
 									<li>
-										<a href="manage-home-slider.php">Manage Home Slider</a>
+										<a href="<?php echo DASHBOARD_PATH.'sliders/manage'?>">Manage Home Slider</a>
 									</li>
 								</ul>
 							</li>
 										<li>
-											<a href="manage-advert.php"><i class="fa fa-tasks"></i>Advert Section</a>
+											<a href="<?php echo DASHBOARD_PATH.'pages/home/sections/advert'?>"><i class="fa fa-tasks"></i>Advert Section</a>
 										</li>
 										<li>
-											<a href="manage-health-tips.php"><i class="fa fa-tasks"></i>Health Tips Section</a>
+											<a href="<?php echo DASHBOARD_PATH.'pages/home/sections/health-tips/manage'?> "><i class="fa fa-tasks"></i>Health Tips Section</a>
 										</li>
 										<li>
-											<a href="manage-home-footer-banner.php"><i class="fa fa-tasks"></i>Home Footer Banner</a>
+											<a href="<?php echo DASHBOARD_PATH.'pages/home/sections/footer-banner'?> "><i class="fa fa-tasks"></i>Home Footer Banner</a>
 										</li>
 									<li class="menu_sub dcjq-parent-li">
 									<a href="#" class="dcjq-parent active"> <i class="fa fa-wpforms"></i> <span>Key Strength</span> <span class="arrow"></span> <span class="dcjq-icon"></span></a>
 											<ul class="down_menu lavel3" style="display: block;">
 									<li>
-										<a href="manage-keystrength-section.php">Key Strength Section</a>
+										<a href="<?php echo DASHBOARD_PATH.'pages/home/sections/key-strength'?>">Key Strength Section</a>
 									</li>
 									<li>
-										<a href="manage-keystrength-items.php">Key Strength Items</a>
+										<a href="<?php echo DASHBOARD_PATH.'pages/home/sections/strength-items/manage'?>">Key Strength Items</a>
 									</li>
 								</ul>
 							</li>
@@ -138,10 +138,10 @@
 									<a href="#" class="dcjq-parent active"> <i class="fa fa-wpforms"></i> <span>Home Equipment</span> <span class="arrow"></span> <span class="dcjq-icon"></span></a>
 											<ul class="down_menu lavel3" style="display: block;">
 									<li>
-										<a href="manage-homeequipment-section.php">Home Equipment Section</a>
+										<a href="<?php echo DASHBOARD_PATH.'pages/home/sections/equipment-section'?>">Home Equipment Section</a>
 									</li>
 									<li>
-										<a href="manage-homeequipment-items.php">Home Equipment Items</a>
+										<a href="<?php echo DASHBOARD_PATH.'pages/home/sections/equipment-items/manage'?>">Home Equipment Items</a>
 									</li>
 								</ul>
 							</li>
