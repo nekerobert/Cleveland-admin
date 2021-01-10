@@ -22,8 +22,6 @@
 		$msgArray = cookie_message();
 		$status = $msgArray["status"];
 		$msg = $msgArray["message"];
-
-		//var_dump($msgArray); exit;
 			// Destroy cookie Message
 		destroy_cookie_message();
 	}
@@ -59,7 +57,7 @@
 								// update the previous slider path to the updated food path
 								// $item["image"] = $result["path"];
 								// $item["file_id"] = $result["id"];
-								$msg = "Equipment file was updated succesfully";
+								$msg = "Equipment was updated succesfully";
 								cookie_message($msg, $status);
 								redirect_to(generate_route($route,"manage"));
 							}
@@ -67,14 +65,11 @@
 							// Errors occured while uploading file
 							// Display Errors to the user
 							$errors = $result;
-							$item["image"] = h(json_to_array($data["content"])["path"]);
+							$item["image"] = h($data["path"]);
 							$item["id"] = h($data["id"]);
 							$item["file_id"] = $id;
 							$editMode = true; 
 							$formUrl = generate_route($route, "edit", $item["id"]);
-							
-							$items  = find_data('page_datas',['page_datas.id','content','page_datas.date_created'],' WHERE  page_datas.title = "home-equipment-item" ', false);
-
 						}
 
 					}else{
@@ -94,21 +89,16 @@
 					if($data){
 						// Delete the file from directory
 						$path = json_to_array($data["content"]);
-						if(!unlink(UPLOAD_PATH.'/'.$path["path"])){
-							// Error occured while deleting file
-							cookie_message($msg, false);
+						if(unlink(UPLOAD_PATH.'/'.$path["path"])){
+							$status = delete_data('page_datas', [$id]);
+							$msg = "Equipment File deleted successfully";
+							// Set cookie message here
+							cookie_message($msg, true);
 							redirect_to(generate_route($route,"manage"));
 						}
-
-						/**
-						 * No Error therefore continue with the deleting of data
-						 */
-						$status = delete_data('page_datas', [$id]);
-						$msg = "Equipment file deleted successfully";
-						// Set cookie message here
-						cookie_message($msg, $status);
+						// Error occured while deleting file
+						cookie_message($msg,false);
 						redirect_to(generate_route($route,"manage"));
-					
 					}else{
 						$msg = "Sorry request failed. Please Try again ";
 						// Set cookie message
@@ -126,7 +116,7 @@
 			// validate Data
 			//Upload new files File
 				$files = $_FILES["file"];
-				
+
 				$result = upload_file($files, true,"home-equipment-item");
 
 				if($result["mode"]){
@@ -140,8 +130,6 @@
 				}else{
 					// Errors occured while uploading file
 					$errors = $result;
-					$items  = find_data('page_datas',['page_datas.id','content','page_datas.date_created'],' WHERE  page_datas.title = "home-equipment-item" ', false);
-
 				}
 			}
 	}else{
@@ -284,7 +272,7 @@
 												<?php if($editMode){ ?>
 													<div class="slider-img mb-2">
 														<img class="img-fluid" src="<?php echo full_upload_url($item["image"]); ?>" alt="Health item Image">
-														<span title="Change Equipment Image" data-toggle="toolitem" class="update-icon"><i class="fa fa-pencil"></i></span>
+														<span title="Change Health item Image" data-toggle="toolitem" class="update-icon"><i class="fa fa-pencil"></i></span>
 													</div>
 												<?php } ?>
 												<div class="form-group <?php echo ($editMode) ? "d-none":"";?> mt-3" id="fileBox">

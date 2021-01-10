@@ -224,7 +224,6 @@
 			
 		}
 
-	
 
 	}
 
@@ -332,10 +331,10 @@
 												</div>
 												<div class="form-check">
 												<?php //echo (int) $slider["enable_sec_title"]; exit?>
-														<input type="checkbox" <?php echo isset($slider["enable_sec_title"]) ? ($slider["enable_sec_title"] == '1' || $slider["enable_sec_title"] =="on" ? 'checked':'') : "";?> id="enable-sec-title" name="enable_sec_title"> 		
+														<input type="checkbox" <?php echo isset($slider["enable_sec_title"]) &&  $slider["enable_sec_title"] == '1' || $slider["enable_sec_title"] =="on" ? 'checked':'';?> id="enable-sec-title" name="enable_sec_title"> 		
 														<label for="agree" class="form-check-label">Enable secondary title </label>
 												</div>
-												<div class="btn-wrapper <?php echo isset($slider["enable_sec_title"])? ($slider["enable_sec_title"] == '1' ||  $slider["enable_sec_title"] == "on" ? '':'d-none'): "d-none";?> ">
+												<div class="btn-wrapper <?php echo isset($slider["enable_sec_title"]) && $slider["enable_sec_title"] == '1' ||  $slider["enable_sec_title"] == "on" ? '':'d-none';?> ">
 													<div class="form-group">
 														<label class="control-label" for="sectitle">Secondary Title</label>
 														<input type="text" class="form-control" id="sectitle" value="<?php echo $slider["secondary_title"] ?? "";?>" name="secondary_title" placeholder="Secondary Title">
@@ -343,10 +342,10 @@
 												</div>
 												
 												<div class="form-check">
-													<input type="checkbox" id="enable-sec-title" <?php echo isset($slider["enable_btn_one"])? ($slider["enable_btn_one"] == '1' || $slider["enable_btn_one"] == "on"? 'checked':''):"";?> name="enable_btn_one"> 		
+													<input type="checkbox" id="enable-sec-title" <?php echo isset($slider["enable_btn_one"]) && $slider["enable_btn_one"] == '1' || $slider["enable_btn_one"] == "on"? 'checked':'';?> name="enable_btn_one"> 		
 													<label for="agree" class="form-check-label"> Enable button one </label>
 												</div>
-												<div class="btn-wrapper <?php echo isset($slider["enable_btn_one"])? ($slider["enable_btn_one"] == '1' || $slider["enable_btn_one"] == "on" ? '':'d-none'):"d-none";?>">
+												<div class="btn-wrapper <?php echo isset($slider["enable_btn_one"]) && $slider["enable_btn_one"] == '1' || $slider["enable_btn_one"] == "on" ? '':'d-none';?>">
 													<div class="form-group">
 														<label class="control-label" for="">Button one Text</label>
 														<input type="text" class="form-control" id="btn-one-text" value="<?php echo $slider["btn_one_text"] ?? "";?>" name="btn_one_text" placeholder="Button one text">
@@ -357,10 +356,10 @@
 													</div>
 												</div>
 												<div class="form-check">
-														<input type="checkbox" id="enable-btn-two" <?php echo isset($slider["enable_btn_two"]) ? ($slider["enable_btn_two"] == '1' || $slider["enable_btn_two"] == "on" ? 'checked':''):"";?> name="enable_btn_two"> 		
+														<input type="checkbox" id="enable-btn-two" <?php echo isset($slider["enable_btn_two"]) && $slider["enable_btn_two"] == '1' || $slider["enable_btn_two"] == "on" ? 'checked':'';?> name="enable_btn_two"> 		
 														<label for="agree" class="form-check-label"> Enable button two </label>
 												</div>
-												<div class="btn-wrapper <?php echo isset($slider["enable_btn_two"])? ($slider["enable_btn_two"] == '1' || $slider["enable_btn_two"] =="on" ? '':'d-none'):"d-none";?> ">
+												<div class="btn-wrapper <?php echo isset($slider["enable_btn_two"]) && $slider["enable_btn_two"] == '1' || $slider["enable_btn_two"] =="on" ? '':'d-none';?> ">
 													<div class="form-group">
 														<label class="control-label" for="sectitle">Button two text</label>
 														<input type="text" class="form-control" id="btn-two-text" value="<?php echo $slider["btn_two_text"] ?? "";?>" name="btn_two_text" placeholder="Button two text">
