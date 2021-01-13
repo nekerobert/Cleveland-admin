@@ -200,6 +200,22 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/home/sections/equipment-items/manage$ /dashboard/equipment-items.php [NC,L]
 
+#pages Routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/faq/manage /dashboard/manage_faq.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/faq/([0-9-/]+)/edit$ /dashboard/manage_faq?faq_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/faq/([0-9-/]+)/delete$ /dashboard/manage_faq?faq_id=$1&mode=delete [NC,L]
+
+
+
+
 
 #Page Routes
 #RewriteCond %{REQUEST_FILENAME} !-f

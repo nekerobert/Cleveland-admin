@@ -326,6 +326,66 @@
         
     }
 
+    function faq_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(6);
+
+        }elseif(is_array($result)){
+            // Only a single record existed;
+            $data = $result;
+            $faq = json_to_array($result["content"]);
+            $faq['date_created'] = $data["date_created"];
+            $faq["id"] = $data["id"];
+            $faq = sanitize_html($faq);
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$faq["faq_title"].'</td>
+                <td>'.$faq["faq_answer"].'</td>
+                <td>'.formatted_date($faq["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit FAQ" class="btn btn-sm text-white btn-warning" href="'.DASHBOARD_PATH.'pages/faq/'.u($faq['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Delete FAQ" class="btn btn-sm text-white btn-danger" href="'.DASHBOARD_PATH.'pages/faq/'.u($faq['id']).'/delete'.'"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+                // Sanitize data
+                $faq = json_to_array($record["content"]);
+                $faq['date_created'] = $record["date_created"];
+                $faq["id"] = $record["id"];
+                $faq = sanitize_html($faq);
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$faq["faq_title"].'</td>
+                <td>'.$faq["faq_answer"].'</td>
+                <td>'.formatted_date($faq["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit FAQ" class="btn btn-sm text-white btn-warning" href="'.DASHBOARD_PATH.'pages/faq/'.u($faq['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($faq["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+            $pageCount++;
+            
+        }
+        
+    }
+        
+   
+        return $str;
+    }
+
     
 
 ?>
