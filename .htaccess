@@ -215,6 +215,19 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/about-us/sections/main-section /dashboard/manage_about.php [NC,L]
 
 
+#About us featured Image
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/about-slider/([a-zA-Z0-9-/]+)/edit$ /dashboard/about-us-slider?item_id=$1&mode=editFile [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/about-slider/([a-zA-Z0-9-/]+)/delete$ /dashboard/about-us-slider?item_id=$1&mode=deleteFile [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/about-slider/manage$ /dashboard/about-us-slider.php [NC,L]
+
 
 
 
