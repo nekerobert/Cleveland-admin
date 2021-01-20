@@ -156,7 +156,7 @@ function upload_file($file, $multiple=false, $title="") {
 		/**
 		 * No File was Uploaded
 		 */
-		if(!empty($fileNames)){
+		if(empty($fileNames)){
 			$errors[] = "File(s) not uploaded ";
 			$errors["mode"] = false; //differentiate the error array from success array
 			return $errors;
