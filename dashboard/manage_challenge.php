@@ -1,11 +1,11 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
 <?php
 	   /* Set Main Page Routes*/
-	   $route = "pages/home/sections/health-tips";
+	   $route = "pages/about-us/sections/challenge";
 	   /* Page Route Ends Here*/
 	$errors = []; $status = false; $msg = ""; 
-	if(isset($_GET['tip_id'])){
-		$id = h(u($_GET["tip_id"]));
+	if(isset($_GET['c_id'])){
+		$id = h(u($_GET["c_id"]));
 	}
 
 	if(isset($_COOKIE["message"])){
@@ -23,7 +23,7 @@
 		// confirm request's csrf identifier validity and duration
 		confirm_request_source();
 		// Sanitize to avoid xss attack
-		$tip = sanitize_html($_POST);
+		$challenge = sanitize_html($_POST);
 		// N/B : Delete and Edit operation is handle using post request method also
 		if(isset($_GET["mode"]) && isset($id)){
 			// Mode is for performing either edit or delete operation
@@ -31,19 +31,22 @@
 				case 'delete':
 					// confirm if the id is actually mapped to a slider
 					$msg = "Sorry request failed. Please try again";
-					$tip = find_data('page_datas',['page_datas.id','files.id as file_id'],'INNER JOIN files on page_datas.file_id = files.id ','WHERE page_datas.title="home-health-tip" AND page_datas.id ='.merge_and_escape([$id], $db));
-					if($tip){
-						// Slider Exists
-						delete_data('page_datas', [$id]);
-						$status = delete_data('files', [$tip["file_id"]]);
-						$msg = "Slider deleted successfully";
-					}
-						// Set cookie message here
+					$challenge = find_data('page_datas',['page_datas.id','files.id as file_id'],'INNER JOIN files on page_datas.file_id = files.id ','WHERE page_datas.title="about-challenge-item" AND page_datas.id ='.merge_and_escape([$id], $db));
+                    if(!$challenge){
+                        // Slider Exists
+                        cookie_message($msg,$status);
+					    redirect_to(generate_route($route, "manage"));
+                    }
+                    delete_data('page_datas', [$id]);
+                    $status = delete_data('files', [$challenge["file_id"]]);
+					$msg = "Challenge Item deleted successfully";
+					// Set cookie message here
 					cookie_message($msg,$status);
 					redirect_to(generate_route($route, "manage"));
 					break;
 				default:
-					# code...
+				    cookie_message("Sorry error occured. Please try again",$status);
+					redirect_to(generate_route($route, "manage"));
 					break;
 			}
 		}
@@ -52,14 +55,14 @@
 		if(isset($_GET["mode"]) && isset($id)){
 			switch ($_GET["mode"]) {
 				case 'delete':
-					$msg = "You have not selected any Health Tip";
+					$msg = "You have not delete any Challenge item";
 					cookie_message($msg);
 					redirect_to(generate_route($route, "manage"));
 				break;
 			}
 		}else{
 			//display all pages if any
-			$tips  = find_data('page_datas',['page_datas.id','content','path','page_datas.date_created'],'INNER JOIN files ON page_datas.file_id = files.id',"WHERE page_datas.title='home-health-tip'",false);
+			$challenges  = find_data('page_datas',['page_datas.id','content','path','page_datas.date_created'],'INNER JOIN files ON page_datas.file_id = files.id',"WHERE page_datas.title='about-challenge-item'",false);
 		}
 		
 	}
@@ -80,7 +83,7 @@
 						<div class="row d-flex align-items-center">
 							<div class="col-md-6">
 								<div class="page-breadcrumb">
-									<h1>Manage Health Tips</h1>
+									<h1>Manage About Us Challenge</h1>
 								</div>
 							</div>
 							<div class="col-md-6 justify-content-md-end d-md-flex">
@@ -92,7 +95,7 @@
 											<i class="fa fa-angle-right"></i>
 										</li>
 										<li class="active">
-											Health Tips
+											Manage Challenge
 										</li>
 									</ol>
 								</div>
@@ -102,8 +105,9 @@
 				</div>
 				<!--page title end-->
 
+
 				<div class="container-fluid">
-					<?php 
+                    <?php 
 						echo display_status_message($status, $msg); //Display status success/failure message
 					?>
 					<!-- state start-->
@@ -115,10 +119,10 @@
 									<div class="card card-shadow mb-4">
 										<div class="card-header bg-info d-flex justify-content-between">
 											<div class="card-title text-white">
-												All Health Tips
+												All Challenge Items
 											</div>
 											<div class="card-title text-white">
-												<a class="btn btn-dark" href="<?php echo generate_route($route,"create");?>"><i class="fa fa-pencil"></i> Create An Health Tip</a>
+												<a class="btn btn-dark" href="<?php echo generate_route($route,"create");?>"><i class="fa fa-pencil"></i> Create New Challenge Item</a>
 											</div>
 										</div>
 							          <div class="card-body table-responsive">
@@ -126,7 +130,7 @@
                                             <thead>
                                                 <tr>
 													<th>S/N</th>
-													<th>Tip title</th>
+													<th>Challenge title</th>
                                                     <th>Feature Image</th>
                                                     <th>Date Added</th>
                                                     <th>&nbsp;</th>
@@ -136,7 +140,7 @@
                                             <tfoot>
                                                 <tr>
                                                     <th>S/N</th>
-													<th>Tip title</th>
+													<th>Challenge title</th>
                                                     <th>Feature Image</th>
                                                     <th>Date Added</th>
                                                     <th>&nbsp;</th>
@@ -146,7 +150,7 @@
                                             </tfoot>
                                             <tbody>
 											<?php 
-												echo tips_table_component($tips); ?>
+												echo challenge_table_component($challenges); ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -158,7 +162,7 @@
 				</main>
 			<!--main contents end-->
 
-			<?php echo display_delete_modal('Health Tip'); ?>
+			<?php echo display_delete_modal('Challenge Item'); ?>
 
 <!-- include footer starts-->
 <?php require_once(INCLUDES_PATH.'/admin/footer.inc.php');?>

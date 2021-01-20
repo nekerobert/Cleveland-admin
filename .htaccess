@@ -228,6 +228,26 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/about-us/sections/about-slider/manage$ /dashboard/about-us-slider.php [NC,L]
 
+#About-us Challenge Section
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/challenge/file/([a-zA-Z0-9-/]+)/edit$ /dashboard/add-challenge.php?c_id=$1&mode=editFile [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/challenge/manage /dashboard/manage_challenge.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/challenge/([a-zA-Z0-9-/]+)/delete$ /dashboard/manage_challenge.php?c_id=$1&mode=delete [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/challenge/([a-zA-Z0-9-/]+)/edit$ /dashboard/add-challenge.php?c_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/challenge/create /dashboard/add-challenge.php [NC,L]
 
 
 
