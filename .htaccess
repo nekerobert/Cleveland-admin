@@ -200,24 +200,28 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/home/sections/equipment-items/manage$ /dashboard/equipment-items.php [NC,L]
 
-#pages Routes
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^dashboard/pages/faq/manage /dashboard/manage_faq.php [NC,L]
 
+#About Page main section
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^dashboard/pages/faq/([0-9-/]+)/edit$ /dashboard/manage_faq?faq_id=$1&mode=edit [NC,L]
+RewriteRule ^dashboard/pages/about-us/sections/main-section/([a-zA-Z0-9-/]+)/edit$ /dashboard/manage_about.php?section_id=$1&mode=edit [NC,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^dashboard/pages/faq/([0-9-/]+)/delete$ /dashboard/manage_faq?faq_id=$1&mode=delete [NC,L]
+RewriteRule ^dashboard/pages/about-us/sections/main-section/([a-zA-Z0-9-/]+)/delete$ /dashboard/manage_about.php?section_id=$1&mode=delete [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/main-section /dashboard/manage_about.php [NC,L]
 
 
 
 
 
-#Page Routes
+
+
+
+
 #RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-d
 #RewriteRule ^pages/([a-zA-Z0-9_-]+)/?$ edit_chapter.php?chapter_id=$1 [NC,L]
