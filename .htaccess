@@ -292,6 +292,32 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/about-us/sections/testimonials /dashboard/testimonial_section.php [NC,L]
 
 
+#About Us Team Routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/team/manage /dashboard/manage_team.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/team/create /dashboard/add_team.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/team/file/([a-zA-Z0-9-/]+)/edit$ /dashboard/add_team.php?team_id=$1&mode=editFile [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/team/([a-zA-Z0-9-/]+)/edit$ /dashboard/add_team.php?team_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/team/([a-zA-Z0-9-/]+)/delete$ /dashboard/manage_team.php?team_id=$1&mode=delete [NC,L]
+
+
+
+
+
+
 
 #RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-d
