@@ -152,48 +152,57 @@
                 </li>
 
 <!--About Us starts-->
-                    <li class="menu_sub">
+					<li class="menu_sub">
 						<a href="#"> <i class="fa fa-users"></i> <span>About Us Page</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
+							<li class="menu_sub dcjq-parent-li">
+								<a href="#" class="dcjq-parent active"> <i class="fa fa-wpforms"></i> <span>About Us Main Section</span> <span class="arrow"></span> <span class="dcjq-icon"></span></a>
+									<ul class="down_menu lavel3" style="display: block;">
+										<li>
+											<a href="<?php echo DASHBOARD_PATH.'pages/about-us/sections/main-section';?>"><i class="fa fa-tasks"></i>Main Section</a>
+										</li>
+										<li>
+											<a href="<?php echo DASHBOARD_PATH.'pages/about-us/sections/about-slider/manage';?>"><i class="fa fa-tasks"></i>About Us Slider</a>
+										</li>
+									</ul>
+							</li>
 							<li>
-										<a href="manage-about.php"><i class="fa fa-tasks"></i>About Us</a>
-									</li>
-									
+								<a href="<?php echo DASHBOARD_PATH.'pages/about-us/sections/challenge/manage';?>"><i class="fa fa-tasks"></i>The Challenge</a>
+							</li>
+							<li class="menu_sub dcjq-parent-li">
+								<a href="#" class="dcjq-parent active"> <i class="fa fa-wpforms"></i> <span>Core Values</span> <span class="arrow"></span> <span class="dcjq-icon"></span></a>
+								<ul class="down_menu lavel3" style="display: block;">
 									<li>
-										<a href="manage-challenge.php"><i class="fa fa-tasks"></i>The Challenge</a>
-									</li>
-								<li class="menu_sub dcjq-parent-li">
-									<a href="#" class="dcjq-parent active"> <i class="fa fa-wpforms"></i> <span>Core Values</span> <span class="arrow"></span> <span class="dcjq-icon"></span></a>
-											<ul class="down_menu lavel3" style="display: block;">
-									<li>
-										<a href="manage-corevalue-section.php">Manage Core Value Section</a>
+										<a href="<?php echo DASHBOARD_PATH.'pages/about-us/sections/core-value';?>">Manage Core Value Section</a>
 									</li>
 									<li>
-										<a href="manage-corevalue-items.php">Core Value Items</a>
+										<a href="<?php echo DASHBOARD_PATH.'pages/about-us/sections/value-items/manage';?>">Core Value Items</a>
 									</li>
 								</ul>
 							</li>
+
+							<li class="menu_sub dcjq-parent-li">
+								<a href="#" class="dcjq-parent active"> <i class="fa fa-wpforms"></i> <span>Testimonials</span> <span class="arrow"></span> <span class="dcjq-icon"></span></a>
+								<ul class="down_menu lavel3" style="display: block;">
 									<li>
-										<a href="manage-team.php"><i class="fa fa-tasks"></i>Manage Team</a>
-									</li>
-								<li class="menu_sub dcjq-parent-li">
-									<a href="#" class="dcjq-parent active"> <i class="fa fa-wpforms"></i> <span>Testimonial</span> <span class="arrow"></span> <span class="dcjq-icon"></span></a>
-											<ul class="down_menu lavel3" style="display: block;">
-									<li>
-										<a href="manage-testimonial-section.php">Testimonial Section</a>
+										<a href="<?php echo DASHBOARD_PATH.'pages/about-us/sections/testimonials';?>"><i class="fa fa-tasks"></i>Testimonials section</a>
 									</li>
 									<li>
-										<a href="manage-testimonial-items.php">Testimonial Items</a>
+										<a href="<?php echo DASHBOARD_PATH.'pages/about-us/sections/testimonial-items/manage';?>"><i class="fa fa-tasks"></i>Testimonials items</a>
 									</li>
 								</ul>
 							</li>
+							<li>
+								<a href="<?php echo DASHBOARD_PATH.'pages/about-us/sections/team/manage';?>"><i class="fa fa-tasks"></i>Manage Team Members</a>
+							</li>
+
 							<li>
 								<a href="manage-about-footerbanner.php"><i class="fa fa-tasks"></i>About Footer Banner</a>
-									</li>
-                                    </ul>
-                                </li>
-<!--About stops-->
+							</li>
 
+						</ul>
+
+					</li>
 <!-- Services Starts -->
 
    <li class="menu_sub">
