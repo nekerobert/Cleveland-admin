@@ -638,6 +638,72 @@
         
     }
 
+    function testimonial_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(6);
+
+        }elseif(is_array($result)){
+            $testimonial = regenerate_with_required(json_to_array($result["content"]), 'testifier_name,testifier_title');
+            $testimonial["id"] = $result["id"];
+            $testimonial["date_created"] = $result["date_created"];
+            $testimonial["img"] = full_upload_url($result["path"]);
+            // sanitize to avoid xss attack
+            $testimonial = sanitize_html($testimonial);
+           
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$testimonial["img"].'" /></td>
+                <td>'.$testimonial["testifier_name"].'</td>
+                <td>'.$testimonial["testifier_title"].'</td>
+                <td>'.formatted_date($testimonial["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit testimonial" class="btn btn-sm btn-warning text-white" href="'.DASHBOARD_PATH.'pages/about-us/sections/testimonial-items/'.u($testimonial['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($testimonial["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+                $data = json_to_array($record["content"]);
+                $testimonial = regenerate_with_required($data, 'testifier_name,testifier_title');
+                $testimonial["id"] = $record["id"];
+                $testimonial["date_created"] = $record["date_created"];
+                $testimonial["img"] = full_upload_url($record["path"]);
+                // sanitize to avoid xss attack
+                $testimonial = sanitize_html($testimonial);
+                
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$testimonial["img"].'" /></td>
+                <td>'.$testimonial["testifier_name"].'</td>
+                <td>'.$testimonial["testifier_title"].'</td>
+                <td>'.formatted_date($testimonial["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Testimonial" class="btn btn-sm btn-warning text-white" href="'.DASHBOARD_PATH.'pages/about-us/sections/testimonial-items/'.u($testimonial['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($testimonial["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+            $pageCount++;
+            
+        }
+            
+        }
+
+        return $str;
+        
+    }
+
     
 
 ?>

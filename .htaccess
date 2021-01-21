@@ -315,6 +315,27 @@ RewriteRule ^dashboard/pages/about-us/sections/team/([a-zA-Z0-9-/]+)/delete$ /da
 
 
 
+#About Us Testimonials item Routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/testimonial-items/manage /dashboard/testimonial_item.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/testimonial-items/create /dashboard/add_testimonial_item.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/testimonial-items/file/([a-zA-Z0-9-/]+)/edit$ /dashboard/add_testimonial_item.php?t_id=$1&mode=editFile [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/testimonial-items/([a-zA-Z0-9-/]+)/edit$ /dashboard/add_testimonial_item.php?t_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/testimonial-items/([a-zA-Z0-9-/]+)/delete$ /dashboard/testimonial_item.php?t_id=$1&mode=delete [NC,L]
+
 
 
 
