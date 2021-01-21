@@ -1,12 +1,12 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
 <?php
 	/* Set Main Page Routes*/
-	$route = "pages/home/sections/equipment-section";
+	$route = "pages/about-us/sections/main-section";
 	/* Page Route Ends Here*/
 	$errors = []; $status = false; $msg = ""; 
 	$editMode = false;
 	$formUrl = generate_route($route);
-	$formTitle = "Add Equipment Section Content";
+	$formTitle = "Add About Us Main Section Content";
 	$advert = '';
 	if(isset($_GET['section_id'])){
 		$id = h(u($_GET["section_id"]));
@@ -32,7 +32,7 @@
 		// N/B : Delete and Edit operation is handle using post request method also
 		if(isset($_GET["mode"]) && isset($id)){
 			// Mode is for performing either edit or delete operation
-			$formTitle = "Edit Homepage Equipment section";
+			$formTitle = "Edit About Us Main Section";
 			switch ($_GET["mode"]) {
 				case 'edit':
 					//Editing a new Advert
@@ -45,9 +45,9 @@
 					if(!$valResult){
 						// No errors
 						// Confirm if section already exist by retrieving the record based on the Id
-						$data = find_data('page_datas',['id'],' WHERE page_datas.title = "home-equipment-section" AND page_datas.id ='.merge_and_escape([$id],$db).' LIMIT 1', false);
+						$data = find_data('page_datas',['id'],' WHERE page_datas.title = "main-section-about" AND page_datas.id ='.merge_and_escape([$id],$db).' LIMIT 1', false);
 						if($data){
-							// File Exist
+                            $section["enable_subtitle"] = !isset($section["enable_subtitle"]) ? 0: 1;
 							// Prepare data values to be Updated
 							$data["content"] = array_to_json($section,'csrf_token');
 							$data["date_updated"] = date('Y-m-d h:i:s');
@@ -75,14 +75,16 @@
 			// N/B: validation is done only on the advert title if the advert section is selected
 			$valResult = validate_data(regenerate_with_required($section,"section_title"));
 			if(!$valResult){
-				$data["content"] =  array_to_json($section,'csrf_token');
-				$data["title"] = "home-equipment-section";
+                
+                $section["enable_subtitle"] = !isset($section["enable_subtitle"]) ? 0: 1;
+                $data["content"] =  array_to_json($section,'csrf_token');
+				$data["title"] = "main-section-about";
 				$data["date_created"] = date('Y-m-d h:i:s');
 				$status = insert_data('page_datas',$data);
-				$msg = "section created successfully";
+				$msg = "section content added successfully";
 				//To be used in the form again
 				$formUrl = generate_route($route, 'edit', h(u(get_id($db))));
-				$formTitle = "Edit Homepage Equipment section";
+				$formTitle = "Edit About Us Main section";
 
 			}else{
 				// Validation errors are available here
@@ -99,11 +101,11 @@
 			switch ($_GET["mode"]) {
 				case 'edit':
 					//Fetch Record base on the specified Identifier
-					$data  = find_data('page_datas',['page_datas.id','content']," WHERE page_datas.title='home-equipment-section' AND page_datas.id = ".merge_and_escape([$id],$db)." LIMIT 1",false);
+					$data  = find_data('page_datas',['page_datas.id','content']," WHERE page_datas.title='main-section-about' AND page_datas.id = ".merge_and_escape([$id],$db)." LIMIT 1",false);
 					if($data){
 						$section = json_to_array($data["content"]);
 						$formUrl = generate_route($route, "edit", $id);
-						$formTitle = "Edit Homepage Equipment section";
+						$formTitle = "Edit About Us Main Section";
 						// var_dump($section); exit;
 					}else{
 						//User tempered with the query string parameter
@@ -122,12 +124,12 @@
 			
 		}else{
 			// Default Get Request to the page
-			$data = find_data('page_datas',['content','page_datas.id'], ' WHERE page_datas.title ="home-equipment-section" LIMIT 1', false);
+			$data = find_data('page_datas',['content','page_datas.id'], ' WHERE page_datas.title ="main-section-about" LIMIT 1', false);
 			if($data){
 				$section = sanitize_html(json_to_array($data["content"]));
 				$section["id"] = h(u($data["id"]));
 				$formUrl = generate_route($route, "edit", $section["id"]);;
-				$formTitle = "Edit Homepage equipment section";
+				$formTitle = "Edit Homepage footer section";
 			}
 
 		
@@ -156,7 +158,7 @@
 						<div class="row d-flex align-items-center">
 							<div class="col-md-6">
 								<div class="page-breadcrumb">
-									<h1>Manage Home Equipment Section</h1>
+									<h1>Manage Main Section</h1>
 								</div>
 							</div>
 							<div class="col-md-6 justify-content-md-end d-md-flex">
@@ -168,7 +170,7 @@
 											<i class="fa fa-angle-right"></i>
 										</li>
 										<li class="active">
-											Home Equipment Section
+										 Main Section
 										</li>
 									</ol>
 								</div>
@@ -192,22 +194,60 @@
 									<div class="card  border-info lobicard-custom-control lobi-light  mb-4">
 										<div class="card-header bg-info ">
 											<div class="card-title text-white">
-												Home Equipment Section
+												About Us Main Section
 											</div>
 										</div>
 									<div class="card-body">
 										<form id="form" method="post" class=" right-text-label-form feedback-icon-form" action="<?php echo $formUrl; ?>">
 											<div class="form-group">
-												<label class="control-label" for="section-title">Section Title</label>
+												<label class="control-label" for="section-title">Section title</label>
 												<input type="text" value="<?php echo $section["section_title"] ?? ""; ?>" class="form-control form-control-lg" id="section-title" name="section_title" placeholder="Section Title">
 												<?php echo form_error_component($errors, 'section_title');?>
 											</div>
-											
-											<div class="form-group">
-												<label class="control-label" for="section-description">Section Description</label>
-												<textarea id="section-description" class="form-control" name="section_desc" rows="8" cols="4"><?php echo $section["section_desc"] ?? ""; ?></textarea>
+                                            <div class="form-check">
+												<input type="checkbox" id="enable-section-subtitle" <?php echo isset($section["enable_subtitle"]) && $section["enable_subtitle"] == '1' ? 'checked':'';?> name="enable_subtitle"> 		
+												<label for="enable-section-subtitle" class="form-check-label"> Enable section subtitle </label>
+											</div>
+											<div class="btn-wrapper <?php echo isset($section["enable_subtitle"]) && $section["enable_subtitle"] == '1' ? '':'d-none';?> ">
+												<div class="form-group">
+													<label class="control-label" for="tip-subtitle">Section subtitle</label>
+													<input type="text" value="<?php echo $section["subtitle"] ?? ""; ?>" class="form-control" id="subtitle" name="subtitle" placeholder="Main Section Subtitle">
+												</div>
+                                            </div>
+
+                                            <div class="form-group">
+												<label class="control-label" for="section-description">Section short description</label>
+												<textarea id="section-description" class="form-control" name="short_desc" rows="8" cols="4"><?php echo $section["short_desc"] ?? ""; ?></textarea>
+											</div>
+                                            <div class="form-group">
+												<label class="control-label" for="section-description">Section full description</label>
+												<textarea id="section-description" class="form-control" name="full_desc" rows="15" cols="4"><?php echo $section["full_desc"] ?? ""; ?></textarea>
+											</div>
+                                            <div class="form-group">
+												<label class="control-label" for="button-text">Button text</label>
+												<input type="text" value="<?php echo $section["btn_text"] ?? ""; ?>" class="form-control form-control-lg" id="Button-text" name="btn_text" placeholder="Button text">
+											</div>
+                                            <div class="form-group">
+												<label class="control-label" for="button-text">Button link</label>
+												<input type="text" value="<?php echo $section["btn_link"] ?? ""; ?>" class="form-control form-control-lg" id="Button-link" name="btn_link" placeholder="Button link">
 											</div>
 
+                                            <div class="form-group">
+												<label class="control-label" for="button-text">Company's vision title</label>
+												<input type="text" value="<?php echo $section["vision_title"] ?? ""; ?>" class="form-control form-control-lg" id="vision-title" name="vision_title" placeholder="Vision title">
+											</div>
+											<div class="form-group">
+												<label class="control-label" for="section-description"> Company's vision content</label>
+												<textarea id="section-description" class="form-control" name="vision_content" rows="8" cols="4"><?php echo $section["vision_content"] ?? ""; ?></textarea>
+											</div>
+                                            <div class="form-group">
+												<label class="control-label" for="button-text">Company's mission title</label>
+												<input type="text" value="<?php echo $section["mission_title"] ?? ""; ?>" class="form-control form-control-lg" id="mission-title" name="mission_title" placeholder="Mision title">
+											</div>
+											<div class="form-group">
+												<label class="control-label" for="section-description"> Company's mission content</label>
+												<textarea id="section-description" class="form-control" name="mission_content" rows="8" cols="4"><?php echo $section["mission_content"] ?? ""; ?></textarea>
+											</div>
 	
 											<?php echo csrf_token_tag(); ?>
 											<div class="form-group text-center form-row">

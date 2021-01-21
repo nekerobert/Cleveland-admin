@@ -326,6 +326,384 @@
         
     }
 
+    function sliderImage_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(5);
+
+        }elseif(is_array($result)){
+            $item = json_to_array($result["content"]);
+            $item["id"] = $result["id"];
+            $item["date_created"] = $result["date_created"];
+            $item["img"] = full_upload_url($item["path"]);
+            // sanitize to avoid xss attack
+            $item = sanitize_html($item);
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$item["img"].'" /></td>
+                <td>'.formatted_date($item["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Update Slider Image" class="btn btn-sm btn-warning text-dark" href="'.DASHBOARD_PATH.'pages/about-us/sections/about-slider/'.u($item['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($item["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+                $item = json_to_array($record["content"]);
+                $item["id"] = $record["id"];
+                $item["date_created"] = $record["date_created"];
+                $item["img"] = full_upload_url($item["path"]);
+                // Sanitize to avoid xss attack
+                $item = sanitize_html($item);
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$item["img"].'" /></td>
+                <td>'.formatted_date($item["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Update Slider Image" class="btn btn-sm btn-warning text-dark" href="'.DASHBOARD_PATH.'pages/about-us/sections/about-slider/'.u($item['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($item["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+            $pageCount++;
+            
+        }
+            
+        }
+
+        return $str;
+        
+    }
+
+    function challenge_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(6);
+
+        }elseif(is_array($result)){
+            $challenge = regenerate_with_required(json_to_array($result["content"]), 'challenge_title');
+            $challenge["id"] = $result["id"];
+            $challenge["date_created"] = $result["date_created"];
+            $challenge["img"] = full_upload_url($result["path"]);
+            // sanitize to avoid xss attack
+            $challenge = sanitize_html($challenge);
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$challenge["challenge_title"].'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$challenge["img"].'" /></td>
+                <td>'.formatted_date($challenge["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Challenge" class="btn btn-sm btn-warning text-dark" href="'.DASHBOARD_PATH.'pages/about-us/sections/challenge/'.u($challenge['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($challenge["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+                $data = json_to_array($record["content"]);
+                $challenge = regenerate_with_required($data, 'challenge_title');
+                $challenge["id"] = $record["id"];
+                $challenge["date_created"] = $record["date_created"];
+                $challenge["img"] = full_upload_url($record["path"]);
+                // Sanitize to avoid xss attack
+                $challenge = sanitize_html($challenge);
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$challenge["challenge_title"].'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$challenge["img"].'"/></td>
+                <td>'.formatted_date($challenge["date_created"]).'</td>
+                <td>
+                <a data-toggle="tooltip" data-placement="top" title="Edit Health Tip" class="btn btn-sm btn-warning text-dark" href="'.DASHBOARD_PATH.'pages/about-us/sections/challenge/'.u($challenge['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+            </td>
+            <td>
+            <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($challenge["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+            </td>
+            </tr>
+        ';
+            $pageCount++;
+            
+        }
+            
+        }
+
+        return $str;
+        
+    }
+
+    function faq_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(6);
+
+        }elseif(is_array($result)){
+            // Only a single record existed;
+            $data = $result;
+            $faq = json_to_array($result["content"]);
+            $faq['date_created'] = $data["date_created"];
+            $faq["id"] = $data["id"];
+            $faq = sanitize_html($faq);
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$faq["faq_title"].'</td>
+                <td>'.$faq["faq_answer"].'</td>
+                <td>'.formatted_date($faq["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit FAQ" class="btn btn-sm text-white btn-warning" href="'.DASHBOARD_PATH.'pages/faq/'.u($faq['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Delete FAQ" class="btn btn-sm text-white btn-danger" href="'.DASHBOARD_PATH.'pages/faq/'.u($faq['id']).'/delete'.'"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+                // Sanitize data
+                $faq = json_to_array($record["content"]);
+                $faq['date_created'] = $record["date_created"];
+                $faq["id"] = $record["id"];
+                $faq = sanitize_html($faq);
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$faq["faq_title"].'</td>
+                <td>'.$faq["faq_answer"].'</td>
+                <td>'.formatted_date($faq["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit FAQ" class="btn btn-sm text-white btn-warning" href="'.DASHBOARD_PATH.'pages/faq/'.u($faq['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($faq["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+            $pageCount++;
+            
+        }
+        
+    }
+        
+   
+        return $str;
+    }
+
+    function coreValue_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(5);
+
+        }elseif(is_array($result)){
+            // Only a single record existed;
+            $item = sanitize_html(json_to_array($result["content"]));
+            $item["date_created"] = $result["date_created"];
+            $item["id"] = h($result["id"]);
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$item["item_title"].'</td>
+                <td>'.formatted_date($item["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Core value item" class="btn btn-sm text-white btn-warning" href="'.DASHBOARD_PATH.'pages/about-us/sections/value-items/'.u($item['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($item["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+                // Sanitize data
+                $item = sanitize_html(json_to_array($record["content"]));
+                $item["date_created"] = $record["date_created"];
+                $item["id"] = h($record["id"]);
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$item["item_title"].'</td>
+                <td>'.formatted_date($item["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Core value item" class="btn btn-sm text-white btn-warning" href="'.DASHBOARD_PATH.'pages/about-us/sections/value-items/'.u($item['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($item["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>';
+            $pageCount++;
+            
+        }
+        
+    }
+        
+   
+        return $str;
+    }
+
+    function team_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(10);
+
+        }elseif(is_array($result)){
+            $member = regenerate_with_required(json_to_array($result["content"]), 'member_name,member_position,member_fb,member_tw,member_lk');
+            $member["id"] = $result["id"];
+            $member["date_created"] = $result["date_created"];
+            $member["img"] = full_upload_url($result["path"]);
+            // sanitize to avoid xss attack
+            $member= sanitize_html($member);
+            $fbstatus = $member["member_fb"] === "" ? "Not Available" : $member["member_fb"];
+            $twstatus = $member["member_tw"] === "" ? "Not Available" : $member["member_tw"];
+            $lkstatus = $member["member_lk"] === "" ? "Not Available" : $member["member_lk"];
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$member["member_name"].'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$member["img"].'" /></td>
+                <td>'.$member["member_position"].'</td>
+                <td>'.$fbstatus.'</td>
+                <td>'.$twstatus.'</td>
+                <td>'.$lkstatus.'</td>
+                <td>'.formatted_date($member["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit member image" class="btn btn-sm btn-warning text-white" href="'.DASHBOARD_PATH.'pages/about-us/sections/team/'.u($member['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($member["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+                $data = json_to_array($record["content"]);
+                $member = regenerate_with_required($data, 'member_name,member_position,member_fb,member_tw,member_lk');
+                $member["id"] = $record["id"];
+                $member["date_created"] = $record["date_created"];
+                $member["img"] = full_upload_url($record["path"]);
+                // Sanitize to avoid xss attack
+                $member= sanitize_html($member);
+                $fbstatus = $member["member_fb"] === "" ? "Not Available" : $member["member_fb"];
+                $twstatus = $member["member_tw"] === "" ? "Not Available" : $member["member_tw"];
+                $lkstatus = $member["member_lk"] === "" ? "Not Available" : $member["member_lk"];
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td>'.$member["member_name"].'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$member["img"].'" /></td>
+                <td>'.$member["member_position"].'</td>
+                <td>'.$fbstatus.'</td>
+                <td>'.$twstatus.'</td>
+                <td>'.$lkstatus.'</td>
+                <td>'.formatted_date($member["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit member image" class="btn btn-sm btn-warning text-white" href="'.DASHBOARD_PATH.'pages/about-us/sections/team/'.u($member['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($member["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+            $pageCount++;
+            
+        }
+            
+        }
+
+        return $str;
+        
+    }
+
+    function testimonial_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(6);
+
+        }elseif(is_array($result)){
+            $testimonial = regenerate_with_required(json_to_array($result["content"]), 'testifier_name,testifier_title');
+            $testimonial["id"] = $result["id"];
+            $testimonial["date_created"] = $result["date_created"];
+            $testimonial["img"] = full_upload_url($result["path"]);
+            // sanitize to avoid xss attack
+            $testimonial = sanitize_html($testimonial);
+           
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$testimonial["img"].'" /></td>
+                <td>'.$testimonial["testifier_name"].'</td>
+                <td>'.$testimonial["testifier_title"].'</td>
+                <td>'.formatted_date($testimonial["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit testimonial" class="btn btn-sm btn-warning text-white" href="'.DASHBOARD_PATH.'pages/about-us/sections/testimonial-items/'.u($testimonial['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($testimonial["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+                $data = json_to_array($record["content"]);
+                $testimonial = regenerate_with_required($data, 'testifier_name,testifier_title');
+                $testimonial["id"] = $record["id"];
+                $testimonial["date_created"] = $record["date_created"];
+                $testimonial["img"] = full_upload_url($record["path"]);
+                // sanitize to avoid xss attack
+                $testimonial = sanitize_html($testimonial);
+                
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$testimonial["img"].'" /></td>
+                <td>'.$testimonial["testifier_name"].'</td>
+                <td>'.$testimonial["testifier_title"].'</td>
+                <td>'.formatted_date($testimonial["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Testimonial" class="btn btn-sm btn-warning text-white" href="'.DASHBOARD_PATH.'pages/about-us/sections/testimonial-items/'.u($testimonial['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($testimonial["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+            $pageCount++;
+            
+        }
+            
+        }
+
+        return $str;
+        
+    }
+
     
 
 ?>

@@ -20,9 +20,6 @@
     function insert_data($table, $data, $exclude =null){
         global $db;
        $sql =  generateInsertSql($table, $data, $db, $exclude);
-
-       echo $sql;
-
         $result = mysqli_query($db, $sql);
         return exit_db("Error Occurred While Inserting Data",$result, $db); //result is always true here
     

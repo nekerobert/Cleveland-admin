@@ -31,10 +31,11 @@
 				case 'delete':
 					// confirm if the id is actually mapped to a slider
 					$msg = "Sorry request failed. Please try again";
-					$tip = find_data('page_datas',['id'],null,'WHERE page_datas.title="home-health-tip" AND page_datas.id ='.merge_and_escape([$id], $db));
+					$tip = find_data('page_datas',['page_datas.id','files.id as file_id'],'INNER JOIN files on page_datas.file_id = files.id ','WHERE page_datas.title="home-health-tip" AND page_datas.id ='.merge_and_escape([$id], $db));
 					if($tip){
 						// Slider Exists
-						$status = delete_data('page_datas', [$id]);
+						delete_data('page_datas', [$id]);
+						$status = delete_data('files', [$tip["file_id"]]);
 						$msg = "Slider deleted successfully";
 					}
 						// Set cookie message here
@@ -101,9 +102,10 @@
 				</div>
 				<!--page title end-->
 
-
 				<div class="container-fluid">
-
+					<?php 
+						echo display_status_message($status, $msg); //Display status success/failure message
+					?>
 					<!-- state start-->
 					<div class="row">
 						<!-- table starts -->

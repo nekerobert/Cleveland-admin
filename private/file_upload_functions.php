@@ -113,43 +113,41 @@ function upload_file($file, $multiple=false, $title="") {
 	global $upload_path;
 	$errors = []; $processFile = [];
 	if(!$multiple){
-		if(!empty($file["name"]) && !empty($file["type"]) && !empty($file["tmp_name"])) {
-			$result = sanitize_file_name($file['name']);
-			$processFile["file_extension"] = file_extension($file["name"]);
-			$processFile["file_type"] = $file['type'];
-			$processFile["tmp_name"] = $file['tmp_name'];
-			$processFile["error"] = $file['error'];
-			$processFile["file_size"] = $file['size'];
-			$processFile["file_path"] = $upload_path . '/' . $result["file_url_name"].".".$processFile["file_extension"];
-			$processFile["file"] = 	$file;
-			
-			// Validate the file
-			$errors = validate_files($processFile);
-		
-			if(empty($errors)){
-				// Upload the file
-				if(move_uploaded_file($processFile["tmp_name"], $processFile["file_path"])) {
-					$response["name"] = $result["name"];
-					$response["path"] = $result["file_url_name"].".".$processFile["file_extension"];
-					$response["type"] = $processFile["file_type"];
-					$response["mode"] = true;
-					return $response;
-				}else{
-					$errors[] = "Error occured While uploading File";
-					$errors["mode"] = false; //differentiate the error array from success array
-					return $errors;
-				}
-				// return $success;
-			}else{
-				$errors["mode"] = false; //differentiate the error array from success array
-				return $errors;
-			}
-		}
-		else{
+		if(empty($file["name"]) && empty($file["type"]) && empty($file["tmp_name"])) {
 			$errors[] = "File was not uploaded ";
 			$errors["mode"] = false; //differentiate the error array from success array
 			return $errors;
 		}
+			
+		$result = sanitize_file_name($file['name']);
+		$processFile["file_extension"] = file_extension($file["name"]);
+		$processFile["file_type"] = $file['type'];
+		$processFile["tmp_name"] = $file['tmp_name'];
+		$processFile["error"] = $file['error'];
+		$processFile["file_size"] = $file['size'];
+		$processFile["file_path"] = $upload_path . '/' . $result["file_url_name"].".".$processFile["file_extension"];
+		$processFile["file"] = 	$file;
+			
+			// Validate the file
+		$errors = validate_files($processFile);
+		
+		if(!empty($errors)){
+			$errors["mode"] = false; //differentiate the error array from success array
+			return $errors;
+		}
+				// Upload the file
+		if(!move_uploaded_file($processFile["tmp_name"], $processFile["file_path"])) {
+			$errors[] = "Error occured While uploading File";
+			$errors["mode"] = false; //differentiate the error array from success array
+			return $errors;
+		}
+
+		$response["name"] = $result["name"];
+		$response["path"] = $result["file_url_name"].".".$processFile["file_extension"];
+		$response["type"] = $processFile["file_type"];
+		$response["mode"] = true;
+		return $response;
+
 	}else{
 		// Handling Uploading of multiple files
 		$resultArray = [];
@@ -158,7 +156,7 @@ function upload_file($file, $multiple=false, $title="") {
 		/**
 		 * No File was Uploaded
 		 */
-		if(!empty($filesNames)){
+		if(empty($fileNames)){
 			$errors[] = "File(s) not uploaded ";
 			$errors["mode"] = false; //differentiate the error array from success array
 			return $errors;

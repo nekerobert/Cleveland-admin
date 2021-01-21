@@ -37,6 +37,13 @@
 			$formTitle = "Edit Equipment Item";
 			switch ($_GET["mode"]) {
 				case 'editFile':
+					
+					// User issued a delete request when the url is still carrying edit endpoint
+					if(!isset($_FILES["file"])){
+						cookie_message("Error occured. Please try again", false);
+						redirect_to(generate_route($route,"manage"));
+					}
+					
 					$editMode = true;
 					$msg = "Equipment file update failed. Please try again"; //Default message to be displayed if update fails
 					// Retrieve record to be deleted, and advert data to be render again on the form
@@ -48,28 +55,34 @@
 							$result["id"] = $id;
 							$result["date_updated"] = date('Y-m-d H:i:s');
 							$item["image"] = $data["path"];
-							if(unlink(UPLOAD_PATH.'/'.$data["path"])){// Delete the previous file
-								$result["content"] = array_to_json(["path"=> $result["path"]]); 
-								$result = regenerate_with_required($result, 'id,content,date_updated');
-								// Update data
-								update_data('page_datas', $result,'id');
-								$status = true;
-								// update the previous slider path to the updated food path
-								// $item["image"] = $result["path"];
-								// $item["file_id"] = $result["id"];
-								$msg = "Equipment was updated succesfully";
+							if(!unlink(UPLOAD_PATH.'/'.$data["path"])){// Delete the previous file
+								// Error occured while deleting file
 								cookie_message($msg, $status);
 								redirect_to(generate_route($route,"manage"));
 							}
+							
+							$result["content"] = array_to_json(["path"=> $result["path"]]); 
+							$result = regenerate_with_required($result, 'id,content,date_updated');
+								// Update data
+							update_data('page_datas', $result,'id');
+							$status = true;
+							// update the previous slider path to the updated food path
+							// $item["image"] = $result["path"];
+							// $item["file_id"] = $result["id"];
+							$msg = "Equipment was updated succesfully";
+							cookie_message($msg, $status);
+							redirect_to(generate_route($route,"manage"));
 						}else{
 							// Errors occured while uploading file
 							// Display Errors to the user
 							$errors = $result;
-							$item["image"] = h($data["path"]);
+							$path = json_to_array($data["content"]); 
+							$item["image"] = h($path["path"]);
 							$item["id"] = h($data["id"]);
 							$item["file_id"] = $id;
 							$editMode = true; 
 							$formUrl = generate_route($route, "edit", $item["id"]);
+							$items  = find_data('page_datas',['page_datas.id','content','page_datas.date_created'],' WHERE  page_datas.title = "home-equipment-item" ', false);
 						}
 
 					}else{
@@ -89,15 +102,14 @@
 					if($data){
 						// Delete the file from directory
 						$path = json_to_array($data["content"]);
-						if(unlink(UPLOAD_PATH.'/'.$path["path"])){
-							$status = delete_data('page_datas', [$id]);
-							$msg = "Equipment File deleted successfully";
-							// Set cookie message here
-							cookie_message($msg, true);
+						if(!unlink(UPLOAD_PATH.'/'.$path["path"])){
+							cookie_message($msg,false);
 							redirect_to(generate_route($route,"manage"));
 						}
-						// Error occured while deleting file
-						cookie_message($msg,false);
+						$status = delete_data('page_datas', [$id]);
+						$msg = "Equipment File deleted successfully";
+						// Set cookie message here
+						cookie_message($msg, true);
 						redirect_to(generate_route($route,"manage"));
 					}else{
 						$msg = "Sorry request failed. Please Try again ";
@@ -130,6 +142,7 @@
 				}else{
 					// Errors occured while uploading file
 					$errors = $result;
+					$items  = find_data('page_datas',['page_datas.id','content','page_datas.date_created'],' WHERE  page_datas.title = "home-equipment-item" ', false);
 				}
 			}
 	}else{
