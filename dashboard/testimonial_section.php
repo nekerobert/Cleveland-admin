@@ -1,12 +1,12 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
 <?php
 	/* Set Main Page Routes*/
-	$route = "pages/home/sections/equipment-section";
+	$route = "pages/about-us/sections/testimonials";
 	/* Page Route Ends Here*/
 	$errors = []; $status = false; $msg = ""; 
 	$editMode = false;
 	$formUrl = generate_route($route);
-	$formTitle = "Add Equipment Section Content";
+	$formTitle = "Add Testimonial Section Content";
 	$advert = '';
 	if(isset($_GET['section_id'])){
 		$id = h(u($_GET["section_id"]));
@@ -32,7 +32,7 @@
 		// N/B : Delete and Edit operation is handle using post request method also
 		if(isset($_GET["mode"]) && isset($id)){
 			// Mode is for performing either edit or delete operation
-			$formTitle = "Edit Homepage Equipment section";
+			$formTitle = "Edit testimonial section";
 			switch ($_GET["mode"]) {
 				case 'edit':
 					//Editing a new Advert
@@ -45,7 +45,7 @@
 					if(!$valResult){
 						// No errors
 						// Confirm if section already exist by retrieving the record based on the Id
-						$data = find_data('page_datas',['id'],' WHERE page_datas.title = "home-equipment-section" AND page_datas.id ='.merge_and_escape([$id],$db).' LIMIT 1', false);
+						$data = find_data('page_datas',['id'],' WHERE page_datas.title = "about-testimonial-section" AND page_datas.id ='.merge_and_escape([$id],$db).' LIMIT 1', false);
 						if($data){
 							// File Exist
 							// Prepare data values to be Updated
@@ -76,13 +76,13 @@
 			$valResult = validate_data(regenerate_with_required($section,"section_title"));
 			if(!$valResult){
 				$data["content"] =  array_to_json($section,'csrf_token');
-				$data["title"] = "home-equipment-section";
+				$data["title"] = "about-testimonial-section";
 				$data["date_created"] = date('Y-m-d h:i:s');
 				$status = insert_data('page_datas',$data);
 				$msg = "section created successfully";
 				//To be used in the form again
 				$formUrl = generate_route($route, 'edit', h(u(get_id($db))));
-				$formTitle = "Edit Homepage Equipment section";
+				$formTitle = "Edit testimonial section";
 
 			}else{
 				// Validation errors are available here
@@ -99,11 +99,11 @@
 			switch ($_GET["mode"]) {
 				case 'edit':
 					//Fetch Record base on the specified Identifier
-					$data  = find_data('page_datas',['page_datas.id','content']," WHERE page_datas.title='home-equipment-section' AND page_datas.id = ".merge_and_escape([$id],$db)." LIMIT 1",false);
+					$data  = find_data('page_datas',['page_datas.id','content']," WHERE page_datas.title='about-testimonial-section' AND page_datas.id = ".merge_and_escape([$id],$db)." LIMIT 1",false);
 					if($data){
 						$section = json_to_array($data["content"]);
 						$formUrl = generate_route($route, "edit", $id);
-						$formTitle = "Edit Homepage Equipment section";
+						$formTitle = "Edit testimonial section";
 						// var_dump($section); exit;
 					}else{
 						//User tempered with the query string parameter
@@ -122,12 +122,12 @@
 			
 		}else{
 			// Default Get Request to the page
-			$data = find_data('page_datas',['content','page_datas.id'], ' WHERE page_datas.title ="home-equipment-section" LIMIT 1', false);
+			$data = find_data('page_datas',['content','page_datas.id'], ' WHERE page_datas.title ="about-testimonial-section" LIMIT 1', false);
 			if($data){
 				$section = sanitize_html(json_to_array($data["content"]));
 				$section["id"] = h(u($data["id"]));
 				$formUrl = generate_route($route, "edit", $section["id"]);;
-				$formTitle = "Edit Homepage equipment section";
+				$formTitle = "Edit testimonial section";
 			}
 
 		
@@ -156,7 +156,7 @@
 						<div class="row d-flex align-items-center">
 							<div class="col-md-6">
 								<div class="page-breadcrumb">
-									<h1>Manage Home Equipment Section</h1>
+									<h1>Manage About-Us Testimonial Section</h1>
 								</div>
 							</div>
 							<div class="col-md-6 justify-content-md-end d-md-flex">
@@ -168,7 +168,7 @@
 											<i class="fa fa-angle-right"></i>
 										</li>
 										<li class="active">
-											Home Equipment Section
+											testimonial Section
 										</li>
 									</ol>
 								</div>

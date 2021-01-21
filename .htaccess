@@ -278,6 +278,18 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/about-us/sections/value-items/([0-9-/]+)/delete$ /dashboard/core_value_items.php?item_id=$1&mode=delete [NC,L]
 
 
+#About Us Testimonial Section
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/testimonials/([a-zA-Z0-9-/]+)/edit$ /dashboard/testimonial_section.php?section_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/testimonials/([a-zA-Z0-9-/]+)/delete$ /dashboard/testimonial_section.php?section_id=$1&mode=delete [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/testimonials /dashboard/testimonial_section.php [NC,L]
 
 
 
