@@ -1,7 +1,7 @@
-
+<?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
 <?php 
-include('includes/header.inc.php');
-include('includes/sidebar.inc.php');
+	require_once(INCLUDES_PATH.'/admin/header.inc.php');
+	require_once(INCLUDES_PATH.'/admin/sidebar.inc.php');
 ?>
 <!-- include headers stops -->
 
@@ -95,7 +95,6 @@ include('includes/sidebar.inc.php');
 
 
 <!-- include footer starts-->
-<?php 
-include('includes/footer.inc.php');
-?>
+<?php require_once(INCLUDES_PATH.'/admin/footer.inc.php');?>
+
 <!-- include footer stops

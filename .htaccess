@@ -336,8 +336,18 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/about-us/sections/testimonial-items/([a-zA-Z0-9-/]+)/delete$ /dashboard/testimonial_item.php?t_id=$1&mode=delete [NC,L]
 
+#About Us Footer Banner
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/footer-banner/([a-zA-Z0-9-/]+)/edit$ /dashboard/about_footer_banner.php?banner_id=$1&mode=edit [NC,L]
 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/footer-banner/([a-zA-Z0-9-/]+)/delete$ /dashboard/about_footer_banner.php?banner_id=$1&mode=delete [NC,L]
 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/footer-banner /dashboard/about_footer_banner.php [NC,L]
 
 
 #RewriteCond %{REQUEST_FILENAME} !-f

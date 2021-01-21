@@ -197,7 +197,7 @@
 							</li>
 
 							<li>
-								<a href="manage-about-footerbanner.php"><i class="fa fa-tasks"></i>About Footer Banner</a>
+								<a href="<?php echo DASHBOARD_PATH.'pages/about-us/sections/footer-banner';?>"><i class="fa fa-tasks"></i>About Footer Banner</a>
 							</li>
 
 						</ul>
