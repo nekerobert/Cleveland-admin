@@ -101,48 +101,58 @@
 				case 'editFile':
 					$editMode = true;
 					$msg = "Member Image Update failed. Please try again"; //Message to be displayed if update fails
-					$data  = find_data('page_datas',['page_datas.id','content','path'],'INNER JOIN files ON page_datas.file_id = files.id'," WHERE files.id = ".merge_and_escape([$id],$db),false);
-					if($data){
-						$result = upload_file($_FILES["file"]);
-						if($result["mode"]){
-							// Retrieve file to be deleted
-							$team = sanitize_html(json_to_array($data["content"]));
-							$result["id"] = $id;
-							$result["date_updated"] = date('Y-m-d H:i:s');
-							$team["image"] = $data["path"];
-							$team["id"] = $data["id"];
-							if(unlink(UPLOAD_PATH.'/'.$data["path"])){// Delete the previous file
-									// Update data
-								update_data('files',$result,'id,mode');
-								$status = true;
-								// update the previous slider path to the updated food path
-								$team["image"] = $result["path"];
-								$team["file_id"] = $result["id"];
-								$msg = "Team member Image was updated succesfully";
-								$formUrl = generate_route($route, "edit", $team["id"]);
-							}
-							else{
-								// Error occured during file upload
-								// Retrieve the slider content to be display in the page again
-								$team = sanitize_html(json_to_array($data["content"]));
-								$team["image"] = h($data["path"]);
-								$team["id"] = h($data["id"]);
-								$team["file_id"] = $id;
-								$editMode = true; 
-								$formUrl = generate_route($route, "edit", $team["id"]);
-							}	
-					}else{
-						
+					$data  = find_data('page_datas',['page_datas.id','content','path'],'INNER JOIN files ON page_datas.file_id = files.id'," WHERE page_datas.title = 'about-team-member' AND files.id = ".merge_and_escape([$id],$db),false);
+					if(!$data){
 						// User tempered with the record Id 
 						$msg = "Sorry file update was not successful. Please try again";
 						$status = false;
 						cookie_message($msg, $status);
 						redirect_to(generate_route($route, "manage"));
 					}
-				}
-			
-				break;
+					
+					$result = upload_file($_FILES["file"]);
+					if($result["mode"]){
+						// Retrieve file to be deleted
+						$team = sanitize_html(json_to_array($data["content"]));
+						$result["id"] = $id;
+						$result["date_updated"] = date('Y-m-d H:i:s');
+						$team["image"] = $data["path"];
+						$team["id"] = $data["id"];
+						if(unlink(UPLOAD_PATH.'/'.$data["path"])){// Delete the previous file
+							// Update data
+							update_data('files',$result,'id,mode');
+							$status = true;
+							// update the previous slider path to the updated food path
+							$team["image"] = $result["path"];
+							$team["file_id"] = $result["id"];
+							$msg = "Team member Image was updated succesfully";
+							$formUrl = generate_route($route, "edit", $team["id"]);
+						}
+						else{
+							// Error occured during file upload
+							// Retrieve the slider content to be display in the page again
+							$team = sanitize_html(json_to_array($data["content"]));
+							$team["image"] = h($data["path"]);
+							$team["id"] = h($data["id"]);
+							$team["file_id"] = $id;
+							$editMode = true; 
+							$formUrl = generate_route($route, "edit", $team["id"]);
+						}
+					}
+					else{
+						// Error occured while uploading file
+						$team = sanitize_html(json_to_array($data["content"]));
+						$team["image"] = h($data["path"]);
+						$team["id"] = h($data["id"]);
+						$team["file_id"] = $id;
+						$errors = $result;
+						$formUrl = generate_route($route, "edit", $team["id"]);
+					}	
+					
+					break;
+
 			}
+		
 		}else{
 			// This is because they are optional
 			$valResult = validate_data(regenerate_with_required($team, 'member_name'), ['member_name'=>'title'] );
@@ -278,8 +288,10 @@
 
 				<div class="container-fluid">
 					<?php echo display_status_message($status, $msg); //Display status success/failure message?>
+					
+					<?php echo display_multiple_errors($errors); //Display errors while uploading files?>
+					
 					<div class="row">
-						<?php echo display_multiple_errors($errors); //Display errors while uploading files?>
 						<!-- form statrts -->
 							
 							<?php if($editMode) {?>

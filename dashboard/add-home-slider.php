@@ -102,26 +102,32 @@
 				case 'editFile':
 					$editMode = true;
 					$msg = "Slider Image Update failed. Please try again"; //Message to be displayed if update fails
-					$data  = find_data('page_datas',['page_datas.id','content','path'],'INNER JOIN files ON page_datas.file_id = files.id',"WHERE files.id = ".merge_and_escape([$id],$db),false);
-					if($data){
-						$result = upload_file($_FILES["file"]);
-						if($result["mode"]){
-							// Retrieve file to be deleted
-							$slider = sanitize_html(json_to_array($data["content"]));
-							$result["id"] = $id;
-							$result["date_updated"] = date('Y-m-d H:i:s');
-							$slider["image"] = $data["path"];
-							$slider["id"] = $data["id"];
-							if(unlink(UPLOAD_PATH.'/'.$data["path"])){// Delete the previous file
-									// Update data
-								update_data('files',$result,'id,mode');
-								$status = true;
-								// update the previous slider path to the updated food path
-								$slider["image"] = $result["path"];
-								$slider["file_id"] = $result["id"];
-								$msg = "slider Image was updated succesfully";
-								$formUrl = generate_route($route, "edit", $slider["id"]);
-							}
+					$data  = find_data('page_datas',['page_datas.id','content','path'],'INNER JOIN files ON page_datas.file_id = files.id'," WHERE page_datas.title = 'slider' AND files.id = ".merge_and_escape([$id],$db),false);
+					if(!$data){
+						$msg = "Sorry file update was not successful. Please try again";
+						$status = false;
+						cookie_message($msg, $status);
+						redirect_to(generate_route($route, "manage"));
+					}
+					
+					$result = upload_file($_FILES["file"]);
+					if($result["mode"]){
+						// Retrieve file to be deleted
+						$slider = sanitize_html(json_to_array($data["content"]));
+						$result["id"] = $id;
+						$result["date_updated"] = date('Y-m-d H:i:s');
+						$slider["image"] = $data["path"];
+						$slider["id"] = $data["id"];
+						if(unlink(UPLOAD_PATH.'/'.$data["path"])){// Delete the previous file
+							// Update data
+							update_data('files',$result,'id,mode');
+							$status = true;
+							// update the previous slider path to the updated food path
+							$slider["image"] = $result["path"];
+							$slider["file_id"] = $result["id"];
+							$msg = "slider Image was updated succesfully";
+							$formUrl = generate_route($route, "edit", $slider["id"]);
+						}
 						else{
 							// Error occured during file upload
 							// Retrieve the slider content to be display in the page again
@@ -133,13 +139,14 @@
 							$formUrl = generate_route($route, "edit", $slider["id"]);
 						}	
 					}else{
-						// User tempered with the record Id 
-						$msg = "Sorry file update was not successful. Please try again";
-						$status = false;
-						cookie_message($msg, $status);
-						redirect_to(generate_route($route, "manage"));
+						// Error occured while uplaoding file
+						$slider = sanitize_html(json_to_array($data["content"]));
+						$slider["image"] = h($data["path"]);
+						$slider["id"] = h($data["id"]);
+						$slider["file_id"] = $id;
+						$errors = $result;
+						$formUrl = generate_route($route, "edit", $slider["id"]);
 					}
-				}
 			
 				break;
 			}
@@ -277,8 +284,9 @@
 
 				<div class="container-fluid">
 					<?php echo display_status_message($status, $msg); //Display status success/failure message?>
+					<?php echo display_multiple_errors($errors); //Display errors while uploading files?>
+
 					<div class="row">
-						<?php echo display_multiple_errors($errors); //Display errors while uploading files?>
 						<!-- form statrts -->
 							
 							<?php if($editMode) {?>
