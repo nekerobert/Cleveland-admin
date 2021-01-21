@@ -229,7 +229,7 @@
 						<a href="#"> <i class="fa fa-question-circle"></i> <span>FAQ</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
 										<li>
-											<a href="manage-faq.php"><i class="fa fa-tasks"></i>Manage FAQ</a>
+											<a href="<?php echo DASHBOARD_PATH.'pages/faq/manage';?>"><i class="fa fa-tasks"></i>Manage FAQ</a>
 										</li>
                                     </ul>
                                 </li>
