@@ -41,14 +41,14 @@
 					$valResult = validate_data(regenerate_with_required($slider,'primary_title'), ['primary_title'=>'title']);
 					if(!$valResult){
 							// Rearrange data values
-						if(!$_POST["enable_sec_title"]){
+						if(!isset($_POST["enable_sec_title"])){
 							$slider["enable_sec_title"] = 0;
 							$slider["secondary_title"] = "";
 						}else{
 							$slider["enable_sec_title"] = 1;
 						}
 
-						if(!$_POST["enable_btn_one"]){
+						if(!isset($_POST["enable_btn_one"])){
 							$slider["enable_btn_one"] = 0;
 							$slider["btn_one_text"] = "";
 							$slider["btn_one_link"] = "";
@@ -56,7 +56,7 @@
 							$slider["enable_btn_one"] = 1;
 						}
 
-						if(!$_POST["enable_btn_two"]){
+						if(!isset($_POST["enable_btn_two"])){
 							$slider["enable_btn_two"] = 0;
 							$slider["btn_two_text"] = "";
 							$slider["btn_two_link"] = "";
@@ -78,6 +78,7 @@
 							$editMode = true;
 							$slider["file_id"] = $file["id"];
 							$slider["image"] = $file["path"];
+							$formUrl = generate_route($route, "edit",$id,);
 					}else{
 							// Id is unverified therefore request source is not accurate
 						$msg = "Sorry request was not successful. Please try again";
@@ -110,6 +111,7 @@
 							$result["id"] = $id;
 							$result["date_updated"] = date('Y-m-d H:i:s');
 							$slider["image"] = $data["path"];
+							$slider["id"] = $data["id"];
 							if(unlink(UPLOAD_PATH.'/'.$data["path"])){// Delete the previous file
 									// Update data
 								update_data('files',$result,'id,mode');
@@ -118,6 +120,7 @@
 								$slider["image"] = $result["path"];
 								$slider["file_id"] = $result["id"];
 								$msg = "slider Image was updated succesfully";
+								$formUrl = generate_route($route, "edit", $slider["id"]);
 							}
 						else{
 							// Error occured during file upload
@@ -127,7 +130,7 @@
 							$slider["id"] = h($data["id"]);
 							$slider["file_id"] = $id;
 							$editMode = true; 
-							$formUrl = generate_route($route, "edit", $tip["id"]);
+							$formUrl = generate_route($route, "edit", $slider["id"]);
 						}	
 					}else{
 						// User tempered with the record Id 
@@ -146,14 +149,14 @@
 			if(!$valResult){
 				//Creating a new Slider
 				// Rearrange data values
-				if(!$_POST["enable_sec_title"]){
+				if(!isset($_POST["enable_sec_title"])){
 					$slider["enable_sec_title"] = 0;
 					$slider["secondary_title"] = "";
 				}else{
 					$slider["enable_sec_title"] = 1;
 				}
 
-				if(!$_POST["enable_btn_one"]){
+				if(!isset($_POST["enable_btn_one"])){
 					$slider["enable_btn_one"] = 0;
 					$slider["btn_one_text"] = "";
 					$slider["btn_one_link"] = "";
@@ -161,7 +164,7 @@
 					$slider["enable_btn_one"] = 1;
 				}
 
-				if(!$_POST["enable_btn_two"]){
+				if(!isset($_POST["enable_btn_two"])){
 					$slider["enable_btn_two"] = 0;
 					$slider["btn_two_text"] = "";
 					$slider["btn_two_link"] = "";
@@ -331,10 +334,10 @@
 												</div>
 												<div class="form-check">
 												<?php //echo (int) $slider["enable_sec_title"]; exit?>
-														<input type="checkbox" <?php echo isset($slider["enable_sec_title"])? ($slider["enable_sec_title"] == '1' || $slider["enable_sec_title"] =="on" ? 'checked':'') : "";?> id="enable-sec-title" name="enable_sec_title"> 		
+														<input type="checkbox" <?php echo isset($slider["enable_sec_title"])? ($slider["enable_sec_title"] == '1' ? 'checked':'') : "";?> id="enable-sec-title" name="enable_sec_title"> 		
 														<label for="agree" class="form-check-label">Enable secondary title </label>
 												</div>
-												<div class="btn-wrapper <?php echo isset($slider["enable_sec_title"])? ($slider["enable_sec_title"] == '1' ||  $slider["enable_sec_title"] == "on" ? '':'d-none') : "d-none";?> ">
+												<div class="btn-wrapper <?php echo isset($slider["enable_sec_title"])? ($slider["enable_sec_title"] == '1' ? '':'d-none') : "d-none";?> ">
 													<div class="form-group">
 														<label class="control-label" for="sectitle">Secondary Title</label>
 														<input type="text" class="form-control" id="sectitle" value="<?php echo $slider["secondary_title"] ?? "";?>" name="secondary_title" placeholder="Secondary Title">
@@ -342,10 +345,10 @@
 												</div>
 												
 												<div class="form-check">
-													<input type="checkbox" id="enable-sec-title" <?php echo isset($slider["enable_btn_one"])? ($slider["enable_btn_one"] == '1' || $slider["enable_btn_one"] == "on"? 'checked':''):"";?> name="enable_btn_one"> 		
+													<input type="checkbox" id="enable-sec-title" <?php echo isset($slider["enable_btn_one"])? ($slider["enable_btn_one"] == '1' ? 'checked':''):"";?> name="enable_btn_one"> 		
 													<label for="agree" class="form-check-label"> Enable button one </label>
 												</div>
-												<div class="btn-wrapper <?php echo isset($slider["enable_btn_one"]) ? ($slider["enable_btn_one"] == '1' || $slider["enable_btn_one"] == "on" ? '':'d-none'):"d-none";?>">
+												<div class="btn-wrapper <?php echo isset($slider["enable_btn_one"]) ? ($slider["enable_btn_one"] == '1' ? '':'d-none'):"d-none";?>">
 													<div class="form-group">
 														<label class="control-label" for="">Button one Text</label>
 														<input type="text" class="form-control" id="btn-one-text" value="<?php echo $slider["btn_one_text"] ?? "";?>" name="btn_one_text" placeholder="Button one text">
@@ -359,7 +362,7 @@
 														<input type="checkbox" id="enable-btn-two" <?php echo isset($slider["enable_btn_two"]) ? ($slider["enable_btn_two"] == '1' || $slider["enable_btn_two"] == "on" ? 'checked':''):"";?> name="enable_btn_two"> 		
 														<label for="agree" class="form-check-label"> Enable button two </label>
 												</div>
-												<div class="btn-wrapper <?php echo isset($slider["enable_btn_two"]) ? ($slider["enable_btn_two"] == '1' || $slider["enable_btn_two"] =="on" ? '':'d-none'):"d-none";?> ">
+												<div class="btn-wrapper <?php echo isset($slider["enable_btn_two"]) ? ($slider["enable_btn_two"] == '1' ? '':'d-none'):"d-none";?> ">
 													<div class="form-group">
 														<label class="control-label" for="sectitle">Button two text</label>
 														<input type="text" class="form-control" id="btn-two-text" value="<?php echo $slider["btn_two_text"] ?? "";?>" name="btn_two_text" placeholder="Button two text">
