@@ -250,6 +250,32 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/about-us/sections/challenge/create /dashboard/add-challenge.php [NC,L]
 
 
+#Core Value Section
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/core-value/([a-zA-Z0-9-/]+)/edit$ /dashboard/core_value_section.php?section_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/core-value/([a-zA-Z0-9-/]+)/delete$ /dashboard/core_value_section.php?section_id=$1&mode=delete [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/core-value /dashboard/core_value_section.php [NC,L]
+
+
+#About Us core core_value_items
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/value-items/manage /dashboard/core_value_items.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/value-items/([0-9-/]+)/edit$ /dashboard/core_value_items.php?item_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/value-items/([0-9-/]+)/delete$ /dashboard/core_value_items.php?item_id=$1&mode=delete [NC,L]
 
 
 
