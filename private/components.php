@@ -850,6 +850,68 @@
         
     }
 
+    
+    function gallery_table_component($result){
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(6);
+
+        }elseif(is_array($result)){
+            $gallery = json_to_array($result["content"]);
+            $gallery["id"] = $result["id"];
+            $gallery["date_created"] = $result["date_created"];
+            $gallery["img"] = full_upload_url($gallery["path"]);
+            // sanitize to avoid xss attack
+            $gallery = sanitize_html($gallery);
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$gallery["img"].'" /></td>
+                <td>'.$gallery['gallery_cat'].'</td>
+                <td>'.formatted_date($gallery["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Update Equipment Image" class="btn btn-sm btn-warning text-dark" href="'.DASHBOARD_PATH.'pages/gallery/sections/gallery-items/'.u($gallery['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($gallery["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+                $gallery = json_to_array($record["content"]);
+                $gallery["id"] = $record["id"];
+                $gallery["date_created"] = $record["date_created"];
+                $gallery["img"] = full_upload_url($gallery["path"]);
+                  // Sanitize to avoid xss attack
+                $gallery = sanitize_html($gallery);
+                $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.$gallery["img"].'" /></td>
+                <td>'.$gallery['gallery_cat'].'</td>
+                <td>'.formatted_date($gallery["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Update Gallery image" class="btn btn-sm btn-warning text-dark" href="'.DASHBOARD_PATH.'pages/gallery/sections/gallery-items/'.u($gallery['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($gallery["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+            $pageCount++;
+            
+        }
+            
+    }
+
+        return $str;
+        
+    }
+
 
     
 

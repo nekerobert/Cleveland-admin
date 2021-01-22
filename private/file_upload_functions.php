@@ -109,7 +109,7 @@ function validate_files($data = []){
 
 }
 
-function upload_file($file, $multiple=false, $title="") {
+function upload_file($file, $multiple=false, $extra="") {
 	global $upload_path;
 	$errors = []; $processFile = [];
 	if(!$multiple){
@@ -207,7 +207,8 @@ function upload_file($file, $multiple=false, $title="") {
 			$path = $result["file_url_name"].".".$processFile["file_extension"];
 			$response["content"] = array_to_json(['path'=> $path]);
 			// $response["type"] = $processFile["file_type"];
-			$response["title"] = $title;
+			if(is_array($extra)){foreach ($extra as $key => $value) {$response[$key] = $value;}}
+			else{$response["title"] = $extra;}
 			$resultArray[] = $response;
 		}
 		
