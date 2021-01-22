@@ -209,10 +209,10 @@
 						<a href="#"> <i class="fa fa-area-chart"></i> <span>Service</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
 					<li>
-					<a href="manage-service-section.php"><i class="fa fa-tasks"></i>Service Section</a>
+					<a href="<?php echo DASHBOARD_PATH.'pages/services/sections/main-section';?>"><i class="fa fa-tasks"></i>Service Section</a>
 					</li>
 						<li>
-						<a href="manage-service-category.php"><i class="fa fa-tasks"></i>Service Category</a>
+						<a href="<?php echo DASHBOARD_PATH.'pages/services/sections/service-category/manage';?>"><i class="fa fa-tasks"></i>Service Category</a>
 					</li>
 					<li>
 					<a href="manage-service-items.php"><i class="fa fa-tasks"></i>Service Items</a>

@@ -363,6 +363,20 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/services/sections/main-section /dashboard/service_section.php [NC,L]
 
+#Service Category Routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/service-category/manage /dashboard/service_category.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/service-category/([0-9-/]+)/edit$ /dashboard/service_category.php?cat_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/service-category/([0-9-/]+)/delete$ /dashboard/service_category.php?cat_id=$1&mode=delete [NC,L]
+
+
 
 
 #faq Routes
