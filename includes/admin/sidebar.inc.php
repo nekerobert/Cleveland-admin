@@ -8,7 +8,7 @@
 					<li class="active">
 						<a href="dashboard.php"> <i class="fa fa-home"></i> <span>Dashboard</span> </a>
 					</li>
-					<li class="menu_sub">
+					<!-- <li class="menu_sub">
 						<a href="#" > <i class="fa fa-newspaper-o"></i> <span>UI Elements </span> <span class="arrow"></span> >
 						<ul class="down_menu">
 							<li>
@@ -98,7 +98,7 @@
 								<a href="calendar-list.html">List Calendar</a>
 							</li>
 						</ul>
-					</li>
+					</li> -->
 
 					<li class="menu_sub">
 						<a href="#"> <i class="fa fa-home"></i> <span>Home Page</span> <span class="arrow"></span> </a>
@@ -279,7 +279,7 @@
                                     </ul>
                                 </li>
 <!--News page stops-->
-					<li class="menu_sub">
+					<!-- <li class="menu_sub">
 						<a href="#"> <i class="fa fa-wpforms"></i> <span>Forms</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
 							<li class="menu_sub">
@@ -296,7 +296,7 @@
 									</li>
 								</ul>
 							</li>
-							<li class="menu_sub">
+							<!-- <li class="menu_sub">
 								<a href="#">Form Validation <span class="arrow"></span> </a>
 								<ul class="down_menu lavel3">
 									<li>
@@ -309,10 +309,10 @@
 										<a href="form-wizard.html">Form Wizard</a>
 									</li>
 								</ul>
-							</li>
-						</ul>
-					</li>
-					<li class="menu_sub">
+							</li> -->
+						<!-- </ul>
+					</li> -->
+					<!-- <li class="menu_sub">
 						<a href="#"> <i class="icon-grid"></i> <span>Data Tables</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
 							<li>
@@ -333,8 +333,8 @@
 								</ul>
 							</li>
 						</ul>
-					</li>
-					<li class="menu_sub">
+					</li> -->
+					<!-- <li class="menu_sub">
 						<a href="#"> <i class="fa fa-bar-chart text-aqua"></i> <span>Charts</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
 							<li>
@@ -347,7 +347,7 @@
 								<a href="morris-chart.html">Morris Charts</a>
 							</li>
 						</ul>
-					</li>
+					</li> -->
 					<li class="menu_sub">
 						<a href="#"> <i class="fa fa-file text-aqua"></i> <span>Extra Pages</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
