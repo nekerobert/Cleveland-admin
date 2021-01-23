@@ -14,8 +14,8 @@
 	if(isset($_GET['g_id'])){
         $id = h(u($_GET["g_id"]));
     }
-    
-    $categories = find_data('categories', ['cat_title'], null, ' WHERE type = "gallery" ');
+	
+	$categories = find_data('categories', ['cat_title'], null, ' WHERE type = "gallery" ');
 
 	if(isset($_COOKIE["message"])){
 		// Get Output Message from cookie
