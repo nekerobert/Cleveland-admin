@@ -1,4 +1,6 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
+<?php confirm_user_login();?>
+
 <?php
 	/* Set Main Faq Routes*/
     	$route = "pages/faq";

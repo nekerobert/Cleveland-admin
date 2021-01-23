@@ -1,4 +1,6 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
+
+
 <?php
 	/* Set Main Page Routes*/
     	$route = "pages/gallery/sections/gallery-category";
