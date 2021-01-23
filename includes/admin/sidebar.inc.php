@@ -240,10 +240,10 @@
 						<a href="#"> <i class="fa fa-image"></i> <span>Gallery</span> <span class="arrow"></span> </a>
 							<ul class="down_menu">
 								<li>
-									<a href="<?php echo DASHBOARD_PATH.'pages/gallery/sections/gallery-category';?>"><i class="fa fa-tasks"></i></i>Gallery Category</a>
+									<a href="<?php echo DASHBOARD_PATH.'pages/gallery/sections/gallery-category/manage';?>"><i class="fa fa-tasks"></i></i>Gallery Category</a>
 								</li>
 								<li>
-									<a href="<?php echo DASHBOARD_PATH.'pages/gallery/sections/gallery-items';?>"><i class="fa fa-tasks"></i>Gallery Items</a>
+									<a href="<?php echo DASHBOARD_PATH.'pages/gallery/sections/gallery-items/manage';?>"><i class="fa fa-tasks"></i>Gallery Items</a>
 								</li>
                             </ul>
                     </li>

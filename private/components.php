@@ -705,13 +705,15 @@
     }
 
 
-    function category_table_component($result){
+    function category_table_component($result, $cat=null){
+        $url =  $cat === 'gallery' ? 
+          'pages/gallery/sections/gallery-category/':
+        'pages/services/sections/service-category/';
         $str = "";
         $pageCount = 1;
         if(is_bool($result)){
             // No record was retrieve from database
             $str.= empty_table_component(5);
-
         }elseif(is_array($result)){
             // Only a single record existed;
             $category = $result;
@@ -721,7 +723,7 @@
                 <td>'.$category["type"].'</td>
                 <td>'.formatted_date($category["date_created"]).'</td>
                 <td>
-                    <a data-toggle="tooltip" data-placement="top" title="Edit Category" class="btn btn-sm text-white btn-warning" href="'.DASHBOARD_PATH.'pages/services/sections/service-category/'.u($category['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Category" class="btn btn-sm text-white btn-warning" href="'.DASHBOARD_PATH.''. $url.''.u($category['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
                 </td>
                 <td>
                     <a data-toggle="modal" data-target="#deletemodal" data-key="'.u($category["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
@@ -741,7 +743,7 @@
                 <td>'.$category["type"].'</td>
                 <td>'.formatted_date($category["date_created"]).'</td>
                 <td>
-                    <a data-toggle="tooltip" data-placement="top" title="Edit Category" class="btn btn-sm text-white btn-warning" href="'.DASHBOARD_PATH.'pages/services/sections/service-category/'.u($category['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit Category" class="btn btn-sm text-white btn-warning" href="'.DASHBOARD_PATH.''.$url.''.u($category['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
                 </td>
                 <td>
                     <a data-toggle="modal" data-target="#deletemodal" data-key="'.u($category["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>

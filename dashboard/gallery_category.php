@@ -209,7 +209,7 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                              	<?php echo category_table_component($categories); ?>
+                                              	<?php echo category_table_component($categories, 'gallery'); ?>
                                             </tbody>
                                         </table>
                                     </div>
