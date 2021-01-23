@@ -267,7 +267,7 @@
 <!--FAQ page stops-->
 
 <!--News page starts-->
-                    <li class="menu_sub">
+                    <!-- <li class="menu_sub">
 						<a href="#"> <i class="fa fa-newspaper-o"></i> <span>News</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
 									<li>
@@ -277,7 +277,7 @@
 											<a href="manage-news.php"><i class="fa fa-tasks"></i>Manage News</a>
 										</li>
                                     </ul>
-                                </li>
+                                </li> -->
 <!--News page stops-->
 					<!-- <li class="menu_sub">
 						<a href="#"> <i class="fa fa-wpforms"></i> <span>Forms</span> <span class="arrow"></span> </a>
