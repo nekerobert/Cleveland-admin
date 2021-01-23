@@ -36,7 +36,7 @@
 					// Id to used for updating record
 					if(!$valResult){
 						// No Errors Continue with Updating
-						$data = find_data('categories',['id'],null," WHERE id =".merge_and_escape([$id],$db));
+						$data = find_data('categories',['id'],null," WHERE type='services' AND id =".merge_and_escape([$id],$db));
 						// Confirm if record exist
 						if($data){
 							$category["id"] = $id;
@@ -56,17 +56,17 @@
 					}else{
 						// Errors Occured
 						$errors = $valResult;
-                        $categories = find_data('categories',['id','cat_title','type','date_created']);
+						$categories = find_data('categories',['id','cat_title','type','date_created'], null, ' WHERE type="services" ');		
 					}
 					
 					break;
 
 				case 'delete':
 					// validate the existence of a record tied to the Id
-					$data = find_data('categories',['id'],null," WHERE id =".merge_and_escape([$id],$db));
+					$data = find_data('categories',['id'],null," WHERE type='services' AND id =".merge_and_escape([$id],$db));
 					if($data){
 						$status = delete_data('categories', [$id]);
-						$msg = "Cateory deleted successfully";
+						$msg = "Category deleted successfully";
 						// Set cookie message here
 						cookie_message($msg,$status);
 						redirect_to(generate_route($route,"manage"));
@@ -100,7 +100,7 @@
 				// There is errors
 				$errors = $valResult;
 				// Retrieve record to be displayed on the table again
-				$categories = find_data('categories',['id','cat_title','type','date_created']);
+				$categories = find_data('categories',['id','cat_title','type','date_created'], null, ' WHERE type="services" ');		
 			}
 
 		}
@@ -128,7 +128,7 @@
 			
 		}else{
 			//display all pages if any
-			$categories  = find_data('categories',['id','cat_title','type','date_created']);
+			$categories = find_data('categories',['id','cat_title','type','date_created'], null, ' WHERE type="services" ');		
 		}
 
 

@@ -62,7 +62,7 @@
 			}
 		}else{
 			//display all pages if any
-			$services = find_data('page_datas',['page_datas.id','content','path','page_datas.date_created'],'INNER JOIN files ON page_datas.file_id = files.id',"WHERE page_datas.title='service-item'",false);
+			$services = find_data('page_datas',['page_datas.id','content','path','page_datas.date_created'],'INNER JOIN files ON page_datas.file_id = files.id',"WHERE page_datas.title='service-item' ORDER BY id desc",false);
 		}
 		
 	}
@@ -122,7 +122,7 @@
 												All Service Items
 											</div>
 											<div class="card-title text-white">
-												<a class="btn btn-dark" href="<?php echo generate_route($route,"create");?>"><i class="fa fa-pencil"></i> Create New Challenge Item</a>
+												<a class="btn btn-dark" href="<?php echo generate_route($route,"create");?>"><i class="fa fa-pencil"></i> Create New Service Item</a>
 											</div>
 										</div>
 							          <div class="card-body table-responsive">

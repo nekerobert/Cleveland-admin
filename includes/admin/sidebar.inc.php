@@ -215,7 +215,7 @@
 						<a href="<?php echo DASHBOARD_PATH.'pages/services/sections/service-category/manage';?>"><i class="fa fa-tasks"></i>Service Category</a>
 					</li>
 					<li>
-					<a href="manage-service-items.php"><i class="fa fa-tasks"></i>Service Items</a>
+					<a href="<?php echo DASHBOARD_PATH.'pages/services/sections/service-items/manage';?>"><i class="fa fa-tasks"></i>Service Items</a>
 				</li>
 				<li>
 					<a href="manage-service-footerbanner.php"><i class="fa fa-tasks"></i>Service Footer Banner</a>
@@ -238,15 +238,15 @@
 <!--GAllery page starts-->
                     <li class="menu_sub">
 						<a href="#"> <i class="fa fa-image"></i> <span>Gallery</span> <span class="arrow"></span> </a>
-						<ul class="down_menu">
-									<li>
-										<a href="manage-gallery-category.php"><i class="fa fa-tasks"></i></i>Gallery Category</a>
-									</li>
-										<li>
-											<a href="manage-gallery-items.php"><i class="fa fa-tasks"></i>Gallery Items</a>
-										</li>
-                                    </ul>
-                                </li>
+							<ul class="down_menu">
+								<li>
+									<a href="<?php echo DASHBOARD_PATH.'pages/gallery/sections/gallery-category';?>"><i class="fa fa-tasks"></i></i>Gallery Category</a>
+								</li>
+								<li>
+									<a href="<?php echo DASHBOARD_PATH.'pages/gallery/sections/gallery-items';?>"><i class="fa fa-tasks"></i>Gallery Items</a>
+								</li>
+                            </ul>
+                    </li>
 <!--Gallery page stops-->
 
 <!--FAQ page starts-->

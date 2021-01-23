@@ -376,7 +376,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/services/sections/service-category/([0-9-/]+)/delete$ /dashboard/service_category.php?cat_id=$1&mode=delete [NC,L]
 
 
-#Services Challenge Section
+#Services items Section
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/services/sections/service-items/file/([a-zA-Z0-9-/]+)/edit$ /dashboard/add_service_item.php?s_id=$1&mode=editFile [NC,L]
@@ -400,15 +400,15 @@ RewriteRule ^dashboard/pages/services/sections/service-items/create /dashboard/a
 #Gallery Category Routes
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^dashboard/pages/services/sections/service-category/manage /dashboard/service_category.php [NC,L]
+RewriteRule ^dashboard/pages/gallery/sections/gallery-category/manage /dashboard/gallery_category.php [NC,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^dashboard/pages/services/sections/service-category/([0-9-/]+)/edit$ /dashboard/service_category.php?cat_id=$1&mode=edit [NC,L]
+RewriteRule ^dashboard/pages/gallery/sections/gallery-category/([0-9-/]+)/edit$ /dashboard/gallery_category.php?cat_id=$1&mode=edit [NC,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^dashboard/pages/services/sections/service-category/([0-9-/]+)/delete$ /dashboard/service_category.php?cat_id=$1&mode=delete [NC,L]
+RewriteRule ^dashboard/pages/gallery/sections/gallery-category/([0-9-/]+)/delete$ /dashboard/gallery_category.php?cat_id=$1&mode=delete [NC,L]
 
 
 #Gallery Items
