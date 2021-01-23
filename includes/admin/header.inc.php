@@ -125,7 +125,7 @@
 								<!-- Dropdown_User -->
 								<div class="dropdown dropdown-user">
 									<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"
-									 aria-expanded="true"> <img class="img-circle pro_pic" src="assets/images/about-1.jpg" alt=""> </a>
+									 aria-expanded="true"> <img class="img-circle pro_pic" src="<?php echo full_upload_url($_SESSION["dp"]);?>" alt=""> </a>
 									<ul class="dropdown-menu dropdown-menu-default">
 										<li>
 											<a href="#"> <i class="icon-user"></i> Profile </a>
