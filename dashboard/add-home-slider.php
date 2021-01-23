@@ -1,9 +1,11 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
+
+<?php confirm_user_login(); ?>
+
 <?php
 	   /* Set Main Page Routes*/
 	   $route = "sliders";
 	   /* Page Route Ends Here*/
-	   
 	$errors = []; $status = false; $msg = ""; 
 	$editMode = false;
 	$formUrl = generate_route($route, "create");
@@ -80,7 +82,7 @@
 							$slider["image"] = $file["path"];
 							$formUrl = generate_route($route, "edit",$id,);
 					}else{
-							// Id is unverified therefore request source is not accurate
+						// Id is unverified therefore request source is not accurate
 						$msg = "Sorry request was not successful. Please try again";
 						$status = false;
 						cookie_message($msg, $status);

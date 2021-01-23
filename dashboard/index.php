@@ -1,5 +1,8 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
 <!-- include headers starts-->
+
+<?php confirm_user_login(); ?>
+
 <?php 
  require_once(INCLUDES_PATH.'/admin/header.inc.php');
  require_once(INCLUDES_PATH.'/admin/sidebar.inc.php');
@@ -105,8 +108,8 @@
 							</div>
 						</div>
 
-						<div class="row">
-							<div class="col-lg-4 d-flex align-items-stretch">
+						<!-- <div class="row">
+							<div class="col-lg-12 d-flex align-items-stretch">
 								<div class="stats-wrap full_chart card mb-4">
 									<div class="chart_header">
 										<div class="chart_headibg">
@@ -151,7 +154,7 @@
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> -->
 
 
 						<div class="row">

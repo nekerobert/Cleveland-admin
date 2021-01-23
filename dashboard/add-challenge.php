@@ -1,4 +1,6 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
+<?php confirm_user_login(); ?>
+
 <?php
    /* Set Main Page Routes*/
     $route = "pages/about-us/sections/challenge";
@@ -113,7 +115,7 @@
 							$challenge["id"] = h($data["id"]);
 							$challenge["file_id"] = $id;
 							$editMode = true; 
-							$formUrl = generate_route($route, "edit", $tip["id"]);
+							$formUrl = generate_route($route, "edit", $challenge["id"]);
 						}
 
 					}else{

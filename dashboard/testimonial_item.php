@@ -1,4 +1,6 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
+<?php confirm_user_login();?>
+
 <?php
 	   /* Set Main Page Routes*/
 	   $route = "pages/about-us/sections/testimonial-items";

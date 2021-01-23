@@ -200,7 +200,6 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/home/sections/equipment-items/manage$ /dashboard/equipment-items.php [NC,L]
 
-
 #About Page main section
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -335,6 +334,130 @@ RewriteRule ^dashboard/pages/about-us/sections/testimonial-items/([a-zA-Z0-9-/]+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/about-us/sections/testimonial-items/([a-zA-Z0-9-/]+)/delete$ /dashboard/testimonial_item.php?t_id=$1&mode=delete [NC,L]
+
+#About Us Footer Banner
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/footer-banner/([a-zA-Z0-9-/]+)/edit$ /dashboard/about_footer_banner.php?banner_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/footer-banner/([a-zA-Z0-9-/]+)/delete$ /dashboard/about_footer_banner.php?banner_id=$1&mode=delete [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/about-us/sections/footer-banner /dashboard/about_footer_banner.php [NC,L]
+
+
+#Service Section
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/main-section/([a-zA-Z0-9-/]+)/edit$ /dashboard/service_section.php?section_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/main-section/([a-zA-Z0-9-/]+)/delete$ /dashboard/service_section.php?section_id=$1&mode=delete [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/main-section /dashboard/service_section.php [NC,L]
+
+#Service Category Routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/service-category/manage /dashboard/service_category.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/service-category/([0-9-/]+)/edit$ /dashboard/service_category.php?cat_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/service-category/([0-9-/]+)/delete$ /dashboard/service_category.php?cat_id=$1&mode=delete [NC,L]
+
+
+#Services items Section
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/service-items/file/([a-zA-Z0-9-/]+)/edit$ /dashboard/add_service_item.php?s_id=$1&mode=editFile [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/service-items/manage /dashboard/manage_servicesItem.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/service-items/([a-zA-Z0-9-/]+)/delete$ /dashboard/manage_servicesItem.php?s_id=$1&mode=delete [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/service-items/([a-zA-Z0-9-/]+)/edit$ /dashboard/add_service_item.php?s_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/service-items/create /dashboard/add_service_item.php [NC,L]
+
+#Gallery Category Routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/gallery/sections/gallery-category/manage /dashboard/gallery_category.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/gallery/sections/gallery-category/([0-9-/]+)/edit$ /dashboard/gallery_category.php?cat_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/gallery/sections/gallery-category/([0-9-/]+)/delete$ /dashboard/gallery_category.php?cat_id=$1&mode=delete [NC,L]
+
+
+#Gallery Items
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/gallery/sections/gallery-items/([a-zA-Z0-9-/]+)/edit$ /dashboard/gallery_items.php?g_id=$1&mode=editFile [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/gallery/sections/gallery-items/([a-zA-Z0-9-/]+)/delete$ /dashboard/gallery_items.php?g_id=$1&mode=deleteFile [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/gallery/sections/gallery-items/manage$ /dashboard/gallery_items.php [NC,L]
+
+
+
+
+
+
+
+#faq Routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/faq/manage /dashboard/manage_faq.php [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/faq/([0-9-/]+)/edit$ /dashboard/manage_faq?faq_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/faq/([0-9-/]+)/delete$ /dashboard/manage_faq?faq_id=$1&mode=delete [NC,L]
+
+#Service Footer Banner
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/footer-banner/([a-zA-Z0-9-/]+)/edit$ /dashboard/service_footer_banner.php?banner_id=$1&mode=edit [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/footer-banner/([a-zA-Z0-9-/]+)/delete$ /dashboard/service_footer_banner.php?banner_id=$1&mode=delete [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/footer-banner /dashboard/service_footer_banner.php [NC,L]
+
+
+
 
 
 

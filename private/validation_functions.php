@@ -1,11 +1,27 @@
 <?php
     $valErrors = [
-        "name" => [],
+        "name"=> [
+            'Name cannot be empty',
+            'Name cannot be less than 3 characters',
+            'Name cannot be numeric'
+        ],
         
         "title"=> [
             'Title cannot be empty',
             'Title cannot be less than 3 characters',
             'Title cannot be numeric'
+        ],
+
+        "password"=>[
+            "password cannot be blank",
+            "password doesn't match"
+        ],
+
+        "email"=>[
+            'email cannot be blank'
+        ],
+        "LoginPassword"=>[
+            "password cannot be blank",
         ],
 
     ];
@@ -59,7 +75,35 @@
                     $errorResult[$unvalidatedDataKey] =  $valErrors[$rule][2];
                 }
                 break;
-            
+                case 'name':
+                    if(is_blank($unvalidatedDataValue)){
+                        $errorResult[$unvalidatedDataKey] =  $valErrors[$rule][0];
+                    }elseif(has_length_less_than($unvalidatedDataValue, 3)){
+                        $errorResult[$unvalidatedDataKey] =  $valErrors[$rule][1];
+                    }elseif(isNumeric($unvalidatedDataValue)){
+                        $errorResult[$unvalidatedDataKey] =  $valErrors[$rule][2];
+                    }
+                break;
+
+                case "password":
+                    if(is_blank($unvalidatedData['password'])){
+                        $errorResult['password'] = $valErrors[$rule][0];
+                    }elseif($unvalidatedData['password'] === $unvalidatedData['confirm_password']){
+                        $errorResult['password'] = $valErrors[$rule][1];
+                    }
+                    break;
+                case "email":
+                     if(is_blank($unvalidatedDataValue)){
+                        $errorResult[$unvalidatedDataKey] =  $valErrors[$rule][0];
+                     }
+                    break;
+
+                    case "LoginPassword":
+                        if(is_blank($unvalidatedDataValue)){
+                            $errorResult[$unvalidatedDataKey] =  $valErrors[$rule][0];
+                        }
+                    break;
+                
             default:
                 # code...
                 break;
@@ -68,24 +112,6 @@
         return $errorResult;
 
 
-    }
-
-
-    function validate_user($user = []){
-        $errors = []; 
-        if($user["password"] === $user["confirm_pass"]){
-            $user['password'] = password_hash($user["password"], PASSWORD_BCRYPT);
-        }else{
-            $errors[] = "Password is not similar";
-        }
-        if(empty($errors)){
-            //no errors
-            $user["error"] = false; 
-            return $user;
-        }else{
-            $errors["error"] = true;
-            return $errors;
-        }
     }
 
     function validate_data($data=[], $SpecifiedRules=[], $excludedData = null){
@@ -100,10 +126,16 @@
         // For usage of this validation function, start by specify the validation rule you want to use in validating each unvalidated data field. You can also exclude the data field you don't want to validate. 
     // The data array to be validated is the first argument, the second argument is the valiation rule to be used in performing validation on each data field. N/B: you have to make sure that the sequence of specifying the validation rule follows the data field you have in the first argument array.
     
-    // Finally, note you can also specify the data fields you want to specifically dont want to validate. This is specify as the third argument. Seperate each data field you don't want to validate in a string.
-        global $valErrors, $errorArray;
+    // Finally, note you can also specify the data fields you want to specifically don't want to validate. This is specify as the third argument. Seperate each data field you don't want to validate in a string.
+        global $valErrors, $errorArray; $confirm_pass = "";
         // regenerate and exclude data specified in the excludeData parameter 
+        if(isset($data['confirm_password'])){
+            $confirm_pass =  $data['confirm_password'];
+        }
+        
         $data = exclude_and_regenerate($data, $excludedData);
+
+        
         $defaultRuleKeys = array_keys($valErrors);
         $SpecifiedRulesValues = array_values($SpecifiedRules);
         $rulesCount = count($SpecifiedRulesValues);
@@ -112,6 +144,10 @@
         for($i = 0;  $i <= $rulesCount-1; $i++){
             if(in_array($SpecifiedRulesValues[$i], $defaultRuleKeys)){
                 $unvalidatedData[$dataKey[$i]] = $dataValue[$i];
+                if($SpecifiedRulesValues[$i] === 'password'){
+                    $unvalidatedData[$dataKey[$i]] = $dataValue[$i];
+                    $unvalidatedData["confirm_password"] =  $confirm_pass;
+                }
                 $returnedErrorResult = errorsFunc($SpecifiedRulesValues[$i], $unvalidatedData);
                 if(!empty($returnedErrorResult)){
                     $errorArray[$dataKey[$i]] = $returnedErrorResult[$dataKey[$i]];

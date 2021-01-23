@@ -109,7 +109,7 @@ function validate_files($data = []){
 
 }
 
-function upload_file($file, $multiple=false, $title="") {
+function upload_file($file, $multiple=false, $extra="") {
 	global $upload_path;
 	$errors = []; $processFile = [];
 	if(!$multiple){
@@ -149,6 +149,17 @@ function upload_file($file, $multiple=false, $title="") {
 		return $response;
 
 	}else{
+		
+		// This works if title is a string
+		$title = $extra; $data = [];
+		
+		if(is_array($extra)){
+			// Extract title from extra array
+			$title = $extra["title"];
+			unset($extra["title"]); //title wil not exist in the json string that will be generated
+		}
+		
+		
 		// Handling Uploading of multiple files
 		$resultArray = [];
 		
@@ -205,8 +216,14 @@ function upload_file($file, $multiple=false, $title="") {
 			 */
 			// $response["name"] = $result["name"];
 			$path = $result["file_url_name"].".".$processFile["file_extension"];
-			$response["content"] = array_to_json(['path'=> $path]);
 			// $response["type"] = $processFile["file_type"];
+			if(is_array($extra)){
+				foreach ($extra as $key => $value) {
+					$data[$key] = $value;
+				}
+			}
+			$data["path"] = $path;
+			$response["content"] = array_to_json($data); //Convert to JSON str
 			$response["title"] = $title;
 			$resultArray[] = $response;
 		}

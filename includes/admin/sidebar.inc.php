@@ -8,7 +8,7 @@
 					<li class="active">
 						<a href="dashboard.php"> <i class="fa fa-home"></i> <span>Dashboard</span> </a>
 					</li>
-					<li class="menu_sub">
+					<!-- <li class="menu_sub">
 						<a href="#" > <i class="fa fa-newspaper-o"></i> <span>UI Elements </span> <span class="arrow"></span> >
 						<ul class="down_menu">
 							<li>
@@ -98,7 +98,7 @@
 								<a href="calendar-list.html">List Calendar</a>
 							</li>
 						</ul>
-					</li>
+					</li> -->
 
 					<li class="menu_sub">
 						<a href="#"> <i class="fa fa-home"></i> <span>Home Page</span> <span class="arrow"></span> </a>
@@ -197,7 +197,7 @@
 							</li>
 
 							<li>
-								<a href="manage-about-footerbanner.php"><i class="fa fa-tasks"></i>About Footer Banner</a>
+								<a href="<?php echo DASHBOARD_PATH.'pages/about-us/sections/footer-banner';?>"><i class="fa fa-tasks"></i>About Footer Banner</a>
 							</li>
 
 						</ul>
@@ -209,16 +209,16 @@
 						<a href="#"> <i class="fa fa-area-chart"></i> <span>Service</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
 					<li>
-					<a href="manage-service-section.php"><i class="fa fa-tasks"></i>Service Section</a>
+					<a href="<?php echo DASHBOARD_PATH.'pages/services/sections/main-section';?>"><i class="fa fa-tasks"></i>Service Section</a>
 					</li>
 						<li>
-						<a href="manage-service-category.php"><i class="fa fa-tasks"></i>Service Category</a>
+						<a href="<?php echo DASHBOARD_PATH.'pages/services/sections/service-category/manage';?>"><i class="fa fa-tasks"></i>Service Category</a>
 					</li>
 					<li>
-					<a href="manage-service-items.php"><i class="fa fa-tasks"></i>Service Items</a>
+					<a href="<?php echo DASHBOARD_PATH.'pages/services/sections/service-items/manage';?>"><i class="fa fa-tasks"></i>Service Items</a>
 				</li>
 				<li>
-					<a href="manage-service-footerbanner.php"><i class="fa fa-tasks"></i>Service Footer Banner</a>
+					<a href="<?php echo DASHBOARD_PATH.'pages/services/sections/footer-banner';?>"><i class="fa fa-tasks"></i>Service Footer Banner</a>
 				</li>
                     </ul>
                 </li>
@@ -229,7 +229,7 @@
 						<a href="#"> <i class="fa fa-question-circle"></i> <span>FAQ</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
 										<li>
-											<a href="manage-faq.php"><i class="fa fa-tasks"></i>Manage FAQ</a>
+											<a href="<?php echo DASHBOARD_PATH.'pages/faq/manage';?>"><i class="fa fa-tasks"></i>Manage FAQ</a>
 										</li>
                                     </ul>
                                 </li>
@@ -238,15 +238,15 @@
 <!--GAllery page starts-->
                     <li class="menu_sub">
 						<a href="#"> <i class="fa fa-image"></i> <span>Gallery</span> <span class="arrow"></span> </a>
-						<ul class="down_menu">
-									<li>
-										<a href="manage-gallery-category.php"><i class="fa fa-tasks"></i></i>Gallery Category</a>
-									</li>
-										<li>
-											<a href="manage-gallery-items.php"><i class="fa fa-tasks"></i>Gallery Items</a>
-										</li>
-                                    </ul>
-                                </li>
+							<ul class="down_menu">
+								<li>
+									<a href="<?php echo DASHBOARD_PATH.'pages/gallery/sections/gallery-category/manage';?>"><i class="fa fa-tasks"></i></i>Gallery Category</a>
+								</li>
+								<li>
+									<a href="<?php echo DASHBOARD_PATH.'pages/gallery/sections/gallery-items/manage';?>"><i class="fa fa-tasks"></i>Gallery Items</a>
+								</li>
+                            </ul>
+                    </li>
 <!--Gallery page stops-->
 
 <!--FAQ page starts-->
@@ -267,7 +267,7 @@
 <!--FAQ page stops-->
 
 <!--News page starts-->
-                    <li class="menu_sub">
+                    <!-- <li class="menu_sub">
 						<a href="#"> <i class="fa fa-newspaper-o"></i> <span>News</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
 									<li>
@@ -277,9 +277,9 @@
 											<a href="manage-news.php"><i class="fa fa-tasks"></i>Manage News</a>
 										</li>
                                     </ul>
-                                </li>
+                                </li> -->
 <!--News page stops-->
-					<li class="menu_sub">
+					<!-- <li class="menu_sub">
 						<a href="#"> <i class="fa fa-wpforms"></i> <span>Forms</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
 							<li class="menu_sub">
@@ -296,7 +296,7 @@
 									</li>
 								</ul>
 							</li>
-							<li class="menu_sub">
+							<!-- <li class="menu_sub">
 								<a href="#">Form Validation <span class="arrow"></span> </a>
 								<ul class="down_menu lavel3">
 									<li>
@@ -309,10 +309,10 @@
 										<a href="form-wizard.html">Form Wizard</a>
 									</li>
 								</ul>
-							</li>
-						</ul>
-					</li>
-					<li class="menu_sub">
+							</li> -->
+						<!-- </ul>
+					</li> -->
+					<!-- <li class="menu_sub">
 						<a href="#"> <i class="icon-grid"></i> <span>Data Tables</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
 							<li>
@@ -333,8 +333,8 @@
 								</ul>
 							</li>
 						</ul>
-					</li>
-					<li class="menu_sub">
+					</li> -->
+					<!-- <li class="menu_sub">
 						<a href="#"> <i class="fa fa-bar-chart text-aqua"></i> <span>Charts</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
 							<li>
@@ -347,7 +347,7 @@
 								<a href="morris-chart.html">Morris Charts</a>
 							</li>
 						</ul>
-					</li>
+					</li> -->
 					<li class="menu_sub">
 						<a href="#"> <i class="fa fa-file text-aqua"></i> <span>Extra Pages</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">

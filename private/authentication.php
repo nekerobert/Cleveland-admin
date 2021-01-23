@@ -5,14 +5,14 @@
         // regenerate a new session id and delete the old session
         session_regenerate_id(true);
         $_SESSION["username"] = $user["username"];
-        $_SESSION["first_name"] = $user["first_name"];
+        $_SESSION["firstname"] = $user["firstname"];
         $_SESSION["surname"] = $user["surname"];
         $_SESSION["login_time"] = time();
         $_SESSION["dp"] = $user["path"];
-        $_SESSION["admin"] = $user["role"];
+        $_SESSION["role"] = $user["role"];
         $_SESSION["user_id"] = $user["id"];
         // redirect to the dashboard
-        redirect_to('dashboard/index.php');
+        redirect_to(DASHBOARD_PATH.'index');
 
     }
 
@@ -37,7 +37,7 @@
     function logout_user(){
         unset($_SESSION["username"]);
         unset($_SESSION["login_time"]);
-        unset($_SESSION["first_name"]);
+        unset($_SESSION["firstname"]);
         unset($_SESSION["surname"]);
         unset($_SESSION["dp"]);
         unset($_SESSION["user_id"]);
@@ -54,7 +54,7 @@
         }
     }
 
-  function confirm_logout(){
+  function logout_and_redirect(){
     if(logout_user()){
         redirect_to('index.php');
     }
