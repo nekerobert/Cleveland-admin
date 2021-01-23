@@ -218,7 +218,7 @@
 					<a href="<?php echo DASHBOARD_PATH.'pages/services/sections/service-items/manage';?>"><i class="fa fa-tasks"></i>Service Items</a>
 				</li>
 				<li>
-					<a href="manage-service-footerbanner.php"><i class="fa fa-tasks"></i>Service Footer Banner</a>
+					<a href="<?php echo DASHBOARD_PATH.'pages/services/sections/footer-banner';?>"><i class="fa fa-tasks"></i>Service Footer Banner</a>
 				</li>
                     </ul>
                 </li>

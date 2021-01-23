@@ -443,7 +443,18 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^dashboard/pages/faq/([0-9-/]+)/delete$ /dashboard/manage_faq?faq_id=$1&mode=delete [NC,L]
 
+#Service Footer Banner
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/footer-banner/([a-zA-Z0-9-/]+)/edit$ /dashboard/service_footer_banner.php?banner_id=$1&mode=edit [NC,L]
 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/footer-banner/([a-zA-Z0-9-/]+)/delete$ /dashboard/service_footer_banner.php?banner_id=$1&mode=delete [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/pages/services/sections/footer-banner /dashboard/service_footer_banner.php [NC,L]
 
 
 
