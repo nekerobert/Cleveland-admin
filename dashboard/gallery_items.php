@@ -130,9 +130,9 @@
 			//Creating a new Health tip
 			if(!$valResult){
 				// Rearrange data values
-				$file = $_FILES["file"];
+				$files = $_FILES["file"];
                 $result = upload_file($files, true, ['title'=>'gallery-item','gallery_cat'=>$gallery['gallery_cat']]);
-                if($result["mode"]){
+				if($result["mode"]){
 						// No errors
                     unset($result["mode"]);
                     insert_multiple_data("page_datas",$result);
@@ -180,7 +180,7 @@
 		}
 
 
-		$galleries  = find_data('page_datas',['page_datas.id','content','page_datas.date_created'],' WHERE  page_datas.title = "gallery_item" ', false);
+		$galleries  = find_data('page_datas',['page_datas.id','content','page_datas.date_created'],' WHERE  page_datas.title = "gallery-item" ORDER BY id desc', false);
 	}
 
 
@@ -291,7 +291,7 @@
 										<div class="card-body">
 											<form id="form" method="post" class=" right-text-label-form feedback-icon-form" action="<?php echo $formUrl?>" enctype="multipart/form-data">
 												<?php if($editMode){ ?>
-													<div class="form-group mb-2">
+													<div class="form-group mb-4">
                                                         <?php $test = $gallery["gallery_cat"] ?? "";?>
                                                         <label for="gallery-cat">Select Gallery category</label>
                                                         <select id="gallery-cat" class="form-control" name="gallery_cat">
