@@ -8,7 +8,7 @@ $allowed_extensions = ['png','jpg', 'jpeg'];
 
 $check_is_image = true;
 $check_for_php = true;
-$max_file_size = 500000; //Max File Size is 500kb
+$max_file_size = 5000000; //Max File Size is 500kb
 
 // Provides plain-text error messages for file upload errors.
 function file_upload_error($error_integer) {
@@ -29,7 +29,7 @@ function file_upload_error($error_integer) {
 // Sanitizes a file name to ensure it is harmless
 function sanitize_file_name($filename) {
 	$filename = preg_replace("/([^A-Za-z0-9_\-\.]|[\.]{2})/", "", $filename);
-	$file_url_name = uniqid('food_', true);
+	$file_url_name = uniqid('cleveland_', true);
 
 	$result = ["name"=> $filename,"file_url_name"=>$file_url_name];
 	return $result;

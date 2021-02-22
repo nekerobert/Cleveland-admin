@@ -914,6 +914,82 @@
         
     }
 
+    function users_table_component($result){
+
+        $str = "";
+        $pageCount = 1;
+        if(is_bool($result)){
+            // No record was retrieve from database
+            $str.= empty_table_component(10);
+
+        }elseif(is_array($result)){
+            // sanitize to avoid xss attack
+            $status = $_SESSION['username'] === $result["username"] ? "<span class='badge badge-success badge-sm'>online</span>" : "<span class='badge badge-secondary badge-sm'>offline</span>";
+            $role = $result["role"] === '1' ? 'Admin':'Super Admin';
+            $state = $result["status"] === '1' ? 'activate':'deactivate';
+            $str.= '<tr>
+                <td>'.$pageCount.'</td>
+                <td><img class="img-fluid image-thumbnail" src="'.full_upload_url($result["path"]).'" /></td>
+                <td>'.$result["firstname"].'</td>
+                <td>'.$result["surname"].'</td>
+                <td>'.$result["username"].'</td>
+                <td>'.$status.'</td>
+                <td>'.$role.'</td>
+                <td>'.formatted_date($result["date_created"]).'</td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="'.ucfirst($state).' user" class="btn btn-sm btn-warning text-white" href="'.DASHBOARD_PATH.'resources/users/'.u($result['id']).'/'.$state.''.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                    <a data-toggle="tooltip" data-placement="top" title="Edit member image" class="btn btn-sm btn-warning text-white" href="'.DASHBOARD_PATH.'resources/users/'.u($result['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($result["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        ';
+
+        }else{
+            // An Object was return
+            // Fetch records from the objects
+            while($record = mysqli_fetch_assoc($result)){
+
+                $record = sanitize_html($record);
+                $status = isset($_SESSION[$record["username"]]) ? "<span class='badge badge-success badge-sm'>online</span>" : "<span class='badge badge-secondary badge-sm'>offline</span>";
+                $role = $record ["role"] === '1' ? 'Admin':'Super Admin';
+                $state = $record["status"] === '1' ? 'deactivate':'activate';
+                $str.= '<tr>
+                    <td>'.$pageCount.'</td>
+                    <td><img class="img-fluid image-thumbnail" src="'.full_upload_url($result["path"]).'" /></td>
+                    <td>'.$record["firstname"].'</td>
+                    <td>'.$record["surname"].'</td>
+                    <td>'.$record["username"].'</td>
+                    <td>'.$status.'</td>
+                    <td>'.$role.'</td>
+                    <td>'.formatted_date($$record["date_created"]).'</td>
+                    <td>
+                        <a data-toggle="tooltip" data-placement="top" title="'.ucfirst($state).' user" class="btn btn-sm btn-warning text-white" href="'.DASHBOARD_PATH.'resources/users/'.u($result['id']).'/'.$state.''.'"><i class="fa fa-edit"></i></a>
+                    </td>
+                    <td>
+                        <a data-toggle="tooltip" data-placement="top" title="Edit user" class="btn btn-sm btn-warning text-white" href="'.DASHBOARD_PATH.'resources/users/'.u($result['id']).'/edit'.'"><i class="fa fa-edit"></i></a>
+                    </td>
+                    <td>
+                    <a  data-toggle="modal" data-target="#deletemodal" data-key="'.u($result["id"]).'" class="btn btn-sm text-white btn-danger delete-link"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            ';
+
+                // Sanitize to avoid xss attack
+          
+            $pageCount++;
+            
+        }
+            
+        }
+
+        return $str;
+        
+    }
+
 
     
 

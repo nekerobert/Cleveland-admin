@@ -1,6 +1,5 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/private/init.php'); ?>
 <!-- include headers starts-->
-
 <?php confirm_user_login(); ?>
 
 <?php 
@@ -155,8 +154,6 @@
 								</div>
 							</div>
 						</div> -->
-
-
 						<div class="row">
 							<div class="col-md-6">
 								<div class="card card-inverse card-danger mb-4">
