@@ -65,13 +65,13 @@
           <button data-filter=".cat3">Group 3</button>
           <button data-filter=".cat4">Group 4</button>
         </div>
-        <div class="grid columns-3">
+        <div class="grid columns-2">
           <div class="grid-item cat1">
             <div class="portfolio-item popup-gallery">
               <div class="portfolio-slider owl-carousel owl-theme no-pb">
                 <div class="item">
                   <a href="images/gallery/large/02.jpg">
-                    <img src="images/gallery/01.jpg" alt="">
+                    <img src="images/gallery/02.jpg" alt="">
                   </a>
                 </div>
                 <div class="item">
@@ -109,7 +109,7 @@
               </div>
             </div>
           </div>
-             <div class="grid-item cat2">
+          <div class="grid-item cat2">
             <div class="portfolio-item popup-gallery">
               <div class="portfolio-slider owl-carousel owl-theme no-pb">
                 <div class="item">
@@ -152,7 +152,50 @@
               </div>
             </div>
           </div>
-             <div class="grid-item cat3">
+             <div class="grid-item cat3 ">
+            <div class="portfolio-item popup-gallery">
+              <div class="portfolio-slider owl-carousel owl-theme no-pb">
+                <div class="item">
+                  <a href="images/gallery/large/02.jpg">
+                    <img src="images/gallery/01.jpg" alt="">
+                  </a>
+                </div>
+                <div class="item">
+                  <a href="images/gallery/large/02.jpg">
+                    <img src="images/gallery/02.jpg" alt="">
+                  </a>
+                </div>
+                <div class="item">
+                  <a href="images/gallery/large/02.jpg">
+                    <img src="images/gallery/03.jpg" alt="">
+                  </a>
+                </div>
+                <div class="item">
+                  <a href="images/gallery/large/02.jpg">
+                    <img src="images/gallery/04.jpg" alt="">
+                  </a>
+                </div>
+                <div class="item">
+                  <a href="images/gallery/large/02.jpg">
+                    <img src="images/gallery/05.jpg" alt="">
+                  </a>
+                </div>
+                <div class="item">
+                  <a href="images/portfolio/large/02.jpg">
+                    <img src="images/gallery/06.jpg" alt="">
+                  </a>
+                </div>
+              </div>
+              <div class="portfolio-hover">
+                <h4>Slider Gallery</h4>
+                <div class="portfolio-title">
+                  <a class="popup" href="#"> <i class="ti-plus"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+             <div class="grid-item cat4 ">
             <div class="portfolio-item popup-gallery">
               <div class="portfolio-slider owl-carousel owl-theme no-pb">
                 <div class="item">
@@ -238,51 +281,8 @@
               </div>
             </div>
           </div>
-             <div class="grid-item cat5">
-            <div class="portfolio-item popup-gallery">
-              <div class="portfolio-slider owl-carousel owl-theme no-pb">
-                <div class="item">
-                  <a href="images/gallery/large/02.jpg">
-                    <img src="images/gallery/01.jpg" alt="">
-                  </a>
-                </div>
-                <div class="item">
-                  <a href="images/gallery/large/02.jpg">
-                    <img src="images/gallery/02.jpg" alt="">
-                  </a>
-                </div>
-                <div class="item">
-                  <a href="images/gallery/large/02.jpg">
-                    <img src="images/gallery/03.jpg" alt="">
-                  </a>
-                </div>
-                <div class="item">
-                  <a href="images/gallery/large/02.jpg">
-                    <img src="images/gallery/04.jpg" alt="">
-                  </a>
-                </div>
-                <div class="item">
-                  <a href="images/gallery/large/02.jpg">
-                    <img src="images/gallery/05.jpg" alt="">
-                  </a>
-                </div>
-                <div class="item">
-                  <a href="images/portfolio/large/02.jpg">
-                    <img src="images/gallery/06.jpg" alt="">
-                  </a>
-                </div>
-              </div>
-              <div class="portfolio-hover">
-                <h4>Slider Gallery</h4>
-                <div class="portfolio-title">
-                  <a class="popup" href="#"> <i class="ti-plus"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
      
-          <div class="grid-item cat6">
+          <div class="grid-item cat4">
             <div class="portfolio-item popup-gallery">
               <img src="images/gallery/01.jpg" alt="">
               <div class="portfolio-hover">
@@ -294,6 +294,7 @@
               </div>
             </div>
           </div>
+       
         </div>
       </div>
     </div>

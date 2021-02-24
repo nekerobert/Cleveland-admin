@@ -98,11 +98,11 @@
           <div class="item">
             <img class="img-fluid w-100" src="images/home/healthy2.jpg" alt="">
           </div>
-<!--
+<!-- 
           <div class="item">
             <img class="img-fluid w-100" src="images/about/telecom_bg.jpg" alt="">
-          </div>
--->
+          </div> -->
+
         </div>
       </div>
       <div class="col-lg-6 col-md-12 md-mt-3">
@@ -113,11 +113,11 @@
         <p>Thomso Construction sit amet, consectetur adipisicing elit. Excepturi vero aliquam id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi vero minima impedit aliquam id. consectetur adipisicing elit. Excepturi vero minima impedit Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
          <!-- <a class="btn btn-theme btn-radius mt-4" href="#"><span>Read More</span></a> -->
       </div>
-<!--       <div class="col-lg-6 col-md-12 md-mt-3">
+      <div class="col-lg-6 col-md-12 md-mt-3">
         <h2 class="title">Helt <span>us</span></h2>
         <p class="lead text-black font-weight-bold">Policy Africa Concept is an organization that is commited to communicating Policies and Laws of different sectors to Nigerian citizens using simple language and Info-graphics.</p>
        <a class="btn btn-sm btn-border btn-radius btn-iconic mt-2" href="about-us.html"><span>Learn More <i aria-hidden="true" class="fas fa-long-arrow-alt-right"></i></span></a>
-      </div> -->
+      </div>
     </div>
     <div class="row mt-5">
     </div>
