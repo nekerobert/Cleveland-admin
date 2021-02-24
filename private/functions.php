@@ -87,6 +87,32 @@ function generate_route($path, $type=null, $id=null){
         (isset($type) && isset($id) ? DASHBOARD_PATH.$path."/".$id."/".$type: DASHBOARD_PATH.$path);
 }
 
+function display_text($text, $type='prefix'){
+    $limit = 0;
+    if($type === 'suffix'){
+        $data = explode(' ',$text);
+        return $data[count($data)-1];
+    }
+    $data = explode(' ',$text);
+
+    switch (count($data)) {
+        case 0:
+        //title is not specified
+            return "";
+        case 1:
+        case 2:
+            return  $data[0];
+        case 3:
+            return implode(' ', array_slice($data,0, count($data)-1));
+        default:
+            return implode(' ', array_slice($data,0, count($data)-2));
+    }
+
+
+
+    
+}
+
 
 
 

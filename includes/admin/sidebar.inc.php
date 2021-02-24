@@ -348,7 +348,7 @@
 							</li>
 						</ul>
 					</li> -->
-					<li class="menu_sub">
+					<!-- <li class="menu_sub">
 						<a href="#"> <i class="fa fa-file text-aqua"></i> <span>Extra Pages</span> <span class="arrow"></span> </a>
 						<ul class="down_menu">
 							<li>
@@ -367,6 +367,6 @@
 								<a href="page_404.html">404</a>
 							</li>
 						</ul>
-					</li>
+					</li> -->
 				</ul>
 			</div>
